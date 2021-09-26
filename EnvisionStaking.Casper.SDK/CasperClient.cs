@@ -12,7 +12,7 @@ namespace EnvisionStaking.Casper.SDK
             SigningService = new SigningService();
             RpcService = new RpcService(rpcUrl);
             HashService = new HashService();
-            DeployService = new DeployService(RpcService);
+            DeployService = new DeployService(RpcService, HashService);
         }
 
         public SigningService SigningService { get; }

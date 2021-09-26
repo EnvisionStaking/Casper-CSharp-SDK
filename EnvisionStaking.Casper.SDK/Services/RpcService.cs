@@ -4,6 +4,7 @@ using EnvisionStaking.Casper.SDK.Model.AuctionInfo;
 using EnvisionStaking.Casper.SDK.Model.Base;
 using EnvisionStaking.Casper.SDK.Model.Block;
 using EnvisionStaking.Casper.SDK.Model.BlockTransfers;
+using EnvisionStaking.Casper.SDK.Model.Common;
 using EnvisionStaking.Casper.SDK.Model.DeployObject;
 using EnvisionStaking.Casper.SDK.Model.Era;
 using EnvisionStaking.Casper.SDK.Model.NodePeers;
@@ -247,8 +248,19 @@ namespace EnvisionStaking.Casper.SDK.Services
             DeployRequest request = new DeployRequest(deployHash);
             request.jsonrpc = JsonRpcVersion;
             request.id = JsonRpcId;
+            var resultJson = RpcClient<DeployRequest>(RpCUrl, request, HttpMethod.Post);
 
-            return RpcClient<DeployRequest, DeployResult>(RpCUrl, request, HttpMethod.Post);
+            return JsonConvert.DeserializeObject<DeployResult>(resultJson, EnvisionStaking.Casper.SDK.Model.Common.Argument.Converter.Settings);
+            //return RpcClient<DeployRequest, DeployResult>(RpCUrl, request, HttpMethod.Post);
+        }
+
+        public PutDeployResult PutDeploy(Deploy deploy)
+        {
+            PutDeployRequest request = new PutDeployRequest(deploy);
+            request.jsonrpc = JsonRpcVersion;
+            request.id = JsonRpcId;
+
+            return RpcClient<PutDeployRequest, PutDeployResult>(RpCUrl, request, HttpMethod.Post);
         }
         #endregion
 
@@ -396,6 +408,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         public K RpcClient<T, K>(string url, T request, HttpMethod httpMethod)
         {
             string result = RpcClient<T>(url, request, httpMethod);
+            //dynamic temp = JsonConvert.DeserializeObject(result);
             var temp = JsonConvert.DeserializeObject<K>(result);
             var tempResultObject = temp as Result;
             if (tempResultObject.error != null)

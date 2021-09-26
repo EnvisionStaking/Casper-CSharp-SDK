@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using EnvisionStaking.Casper.SDK.Utils;
 using Konscious.Security.Cryptography;
 
 namespace EnvisionStaking.Casper.SDK.Services
@@ -10,11 +11,11 @@ namespace EnvisionStaking.Casper.SDK.Services
     public class HashService
     {
 
-        public string GetAccountHash(string accountKey)
+        public string GetAccountHash(  string accountKey)
         {           
-            var valueKeyAlgorithm = CombineBytes(Encoding.UTF8.GetBytes(GetAlgorithm(accountKey).ToLower()), new byte[1]);            
+            var valueKeyAlgorithm = ByteUtil.CombineBytes(Encoding.UTF8.GetBytes(GetAlgorithm(accountKey).ToLower()), new byte[1]);            
 
-            var valueKey = CombineBytes(valueKeyAlgorithm, StringToByteArray(accountKey.Substring(2)));
+            var valueKey = ByteUtil.CombineBytes(valueKeyAlgorithm, StringToByteArray(accountKey.Substring(2)));
 
             var resultHex = GetHashToHex(valueKey);
 
@@ -38,15 +39,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             var resultBytes = hashAlgorithm.ComputeHash(bytes);
 
             return resultBytes;
-        }       
-
-        private byte[] CombineBytes(byte[] first, byte[] second)
-        {
-            byte[] bytes = new byte[first.Length + second.Length];
-            Buffer.BlockCopy(first, 0, bytes, 0, first.Length);
-            Buffer.BlockCopy(second, 0, bytes, first.Length, second.Length);
-            return bytes;
-        }
+        }             
 
         private string GetAlgorithm(string key)
         {
