@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Cms;
+﻿using EnvisionStaking.Casper.SDK.Utils;
+using Org.BouncyCastle.Cms;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -25,8 +26,8 @@ namespace EnvisionStaking.Casper.SDK.Services
             byte[] publicBytes = ReadPem(publicKeyIn);
             byte[] secretBytes = ReadPem(privateKeyIn);
 
-            byte[] publicLastBytes = GetLastNBytes(publicBytes, 32);
-            byte[] secretLastBytes = GetLastNBytes(secretBytes, 32);
+            byte[] publicLastBytes = ByteUtil.GetLastNBytes(publicBytes, 32);
+            byte[] secretLastBytes = ByteUtil.GetLastNBytes(secretBytes, 32);
 
 
             return new AsymmetricCipherKeyPair(new Ed25519PublicKeyParameters(publicLastBytes, 0), new Ed25519PrivateKeyParameters(secretLastBytes, 0));
@@ -81,15 +82,7 @@ namespace EnvisionStaking.Casper.SDK.Services
                 pemWriter.Writer.Flush();
                 return stringWriter.ToString();
             }
-        }
-
-        private byte[] GetLastNBytes(byte[] toTruncate, int length)
-        {
-            byte[] secretBytes = new byte[length];
-            var start = toTruncate.Length - length;
-            Array.Copy(toTruncate, start, secretBytes, 0, length);
-            return secretBytes;
-        }
+        }       
 
         public string ConvertPublicKeyToPem(AsymmetricKeyParameter publicKey)
         {

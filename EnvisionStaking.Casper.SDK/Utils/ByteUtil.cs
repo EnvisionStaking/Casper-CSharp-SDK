@@ -13,5 +13,18 @@ namespace EnvisionStaking.Casper.SDK.Utils
             Buffer.BlockCopy(second, 0, bytes, first.Length, second.Length);
             return bytes;
         }
+
+        public static string ByteArrayToString(byte[] byteArray)
+        {
+            return BitConverter.ToString(byteArray).Replace("-", "");
+        }
+
+        public static byte[] GetLastNBytes(byte[] toTruncate, int length)
+        {
+            byte[] secretBytes = new byte[length];
+            var start = toTruncate.Length - length;
+            Array.Copy(toTruncate, start, secretBytes, 0, length);
+            return secretBytes;
+        }
     }
 }

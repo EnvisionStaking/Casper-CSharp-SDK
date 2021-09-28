@@ -1,4 +1,8 @@
+using EnvisionStaking.Casper.SDK.Model.Common;
+using EnvisionStaking.Casper.SDK.Model.DeployObject;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 
 namespace EnvisionStaking.Casper.SDK.Test
 {
@@ -15,49 +19,29 @@ namespace EnvisionStaking.Casper.SDK.Test
             CasperClient casperClient = new CasperClient(rpcUrl);
             var result = casperClient.RpcService.GetDeploy("bce3326a8bc2104e0acafde7f7bb154aa258265e563fb37b3386220942bdb368");
 
+            var test = result.result.deploy.payment.ModuleBytes.argsObject;
+
+            test.Add(new System.Collections.Generic.KeyValuePair<string, Model.Common.CLValue>("amount1", new CLValue() { cl_type="1", bytes="2", parsed="3"}));
+            result.result.deploy.payment.ModuleBytes.argsObject = test;
+
             Assert.IsNotNull(result.result.deploy);
         }
-        //[TestMethod]
-        //public void MakeDeploy()
-        //{
-        //    //CasperClient casperClient = new CasperClient(rpcUrl);
-        //    //var result = casperClient.RpcService.GetStateRootHash();
+        [TestMethod]
+        public void MakeDeploy()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var makeDeployResult = casperClient.DeployService.MakeDeploy(1000, "0202ba37a693fb6494b3c42a65f07a6123dd125d8bf8a16e10ec7b95b826b151230c", 1234);
 
-        //    //PutDeployParameters deploy = new PutDeployParameters();
+            Assert.IsNotNull(makeDeployResult);
+        }
 
-        //    //deploy.hash = "bce3326a8bc2104e0acafde7f7bb154aa258265e563fb37b3386220942bdb368";
+        [TestMethod]
+        public void MakeDeployToJson()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var makeDeployResult = casperClient.DeployService.MakeDeployToJson(2500010000, "0202ba37a693fb6494b3c42a65f07a6123dd125d8bf8a16e10ec7b95b826b151230c", 1234);
 
-        //    //deploy.header.account = "019b11b42f55380e671278e58352b9b9e0babc454e9222dd435e820163649b7e8c";
-        //    //deploy.header.timestamp = DateTime.Now;
-        //    //deploy.header.ttl = "30m";
-        //    //deploy.header.gas_price = 1;
-        //    //deploy.header.body_hash = "418c521b564a606b0de4b5bfc572c0b93e4d7e6d1a20abb5d4d957d239dd9d9b";
-        //    //deploy.header.dependencies = new List<string>();
-        //    //deploy.header.chain_name = "casper";
-
-        //    //deploy.approvals.Add(new Approval()
-        //    //{
-        //    //    signature = "011f89649c9c2208d154acb719a27b521c636ec7c164051afdf84a088eddc0ad8b404efd63773ab8e5b4443083c431885d7b7f367a503f8e757040d407f3560f08",
-        //    //    signer = "019b11b42f55380e671278e58352b9b9e0babc454e9222dd435e820163649b7e8c"
-        //    //});
-
-        //    //deploy.session = new Session()
-        //    //{
-        //    //    Transfer = new DeployTransfer()
-        //    //    {
-        //    //        args = 
-        //    //    }
-        //    //}
-        //    ////deploy.payment = new Payment()
-        //    ////{
-        //    ////    ModuleBytes = new ModuleBytes()
-        //    ////    {
-        //    ////        module_bytes = "";
-        //    ////    }
-        //    ////}
-
-        //    //Assert.IsNotNull(deploy);
-        //    //Assert.IsTrue(result.result.state_root_hash.Length > 1, "State Root Hash is empty");
-        //}
+            Assert.IsNotNull(makeDeployResult);
+        }
     }
 }
