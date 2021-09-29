@@ -1,4 +1,4 @@
-# Development Status
+# Development Status ~ 80% completion
 
 ## Completed Tasks - Unit Testing Completed - Regression Testing pending
 ### RPC Service Synchronous Operations
