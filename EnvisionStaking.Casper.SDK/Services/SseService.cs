@@ -10,7 +10,7 @@ namespace EnvisionStaking.Casper.SDK.Services
 {
     public class SseService
     {
-        private readonly SseType _sseType;
+        private readonly SseTypeEnum _sseType;
         private readonly string _sseUrl;
         private int _retriesCount;
 
@@ -22,7 +22,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         public event EventHandler<SseDeployAccepted> DeployAccepted;
         public event EventHandler<SseFinalitySignature> FinalitySignature;
 
-        public SseService(string sseUrl, SseType sseType)
+        public SseService(string sseUrl, SseTypeEnum sseType)
         {
             _sseType = sseType;
             _sseUrl = sseUrl;

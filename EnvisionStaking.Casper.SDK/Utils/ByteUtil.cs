@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EnvisionStaking.Casper.SDK.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,9 +15,9 @@ namespace EnvisionStaking.Casper.SDK.Utils
             return bytes;
         }
 
-        public static string ByteArrayToString(byte[] byteArray)
+        public static string ByteArrayToHex(byte[] byteArray)
         {
-            return BitConverter.ToString(byteArray).Replace("-", "");
+            return BitConverter.ToString(byteArray).Replace("-", "").ToLower();
         }
 
         public static byte[] GetLastNBytes(byte[] toTruncate, int length)
@@ -25,6 +26,52 @@ namespace EnvisionStaking.Casper.SDK.Utils
             var start = toTruncate.Length - length;
             Array.Copy(toTruncate, start, secretBytes, 0, length);
             return secretBytes;
+        }
+
+        public static byte[] RemoveLeadingZeros(byte[] bytes)
+        {
+            Array.Reverse(bytes);
+            for (int i = bytes.Length; i > 0; i--)
+            {
+                if (bytes[i] == 0)
+                {
+                    Array.Resize(ref bytes, i);
+                }
+            }
+            Array.Reverse(bytes);
+            return bytes;
+        }
+
+        public static byte[] RemoveTrailingZeros(byte[] bytes)
+        {           
+            for (int i = bytes.Length-1; i >= 0; i--)
+            {
+                if (bytes[i] == 0)
+                {
+                    Array.Resize(ref bytes, i);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return bytes;
+        }
+
+        public static byte[] PrefixOption(byte[] bytes)
+        {
+
+            byte[] optionPrefix = new byte[1];
+            if (bytes == null || bytes.
+                Length == 0)
+            {
+                optionPrefix[0] = (byte)PrefixOptionEnum.OptionNone;
+            }
+            else
+            {
+                optionPrefix[0] = (byte)PrefixOptionEnum.OptionSome;
+            }
+            return CombineBytes(optionPrefix, bytes);
         }
     }
 }

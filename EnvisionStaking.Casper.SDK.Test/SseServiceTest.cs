@@ -26,7 +26,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             stopwatch.Start();
 
             CasperClient casperClient = new CasperClient(sseUrl);
-            casperClient.SseService = new SseService(sseUrl, SseType.main);
+            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
             casperClient.SseService.ApiVersionUpdated += SseService_ApiVersionUpdated;
 
             while (!isEventTriggered && stopwatch.ElapsedMilliseconds < 5000)
@@ -60,7 +60,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             stopwatch.Start();
 
             CasperClient casperClient = new CasperClient(sseUrl);
-            casperClient.SseService = new SseService(sseUrl, SseType.main);
+            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
             casperClient.SseService.BlockAdded += SseService_BlockAdded;
 
             while (!isEventTriggered && stopwatch.ElapsedMilliseconds < 61000)
@@ -94,7 +94,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             stopwatch.Start();
 
             CasperClient casperClient = new CasperClient(sseUrl);
-            casperClient.SseService = new SseService(sseUrl, SseType.sigs);
+            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.sigs);
             casperClient.SseService.FinalitySignature += SseService_FinalitySignature;
 
             while (!isEventTriggered && stopwatch.ElapsedMilliseconds < 60000)
@@ -128,7 +128,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             stopwatch.Start();
 
             CasperClient casperClient = new CasperClient(sseUrl);
-            casperClient.SseService = new SseService(sseUrl, SseType.main);
+            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
             casperClient.SseService.DeployProcessed += SseService_DeployProcessed;
 
             while (!isEventTriggered && stopwatch.ElapsedMilliseconds < 60000)
@@ -162,7 +162,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             stopwatch.Start();
 
             CasperClient casperClient = new CasperClient(sseUrl);
-            casperClient.SseService = new SseService(sseUrl, SseType.deploys);
+            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.deploys);
             casperClient.SseService.DeployAccepted += SseService_DeployAccepted;
 
             while (!isEventTriggered && stopwatch.ElapsedMilliseconds < 60000)
@@ -196,7 +196,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             stopwatch.Start();
 
             CasperClient casperClient = new CasperClient(sseUrl);
-            casperClient.SseService = new SseService(sseUrl, SseType.main);
+            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
             casperClient.SseService.Fault += SseService_Fault;
 
             while (!isEventTriggered && stopwatch.ElapsedMilliseconds < 20000)
@@ -231,7 +231,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             stopwatch.Start();
 
             CasperClient casperClient = new CasperClient(sseUrl);
-            casperClient.SseService = new SseService(sseUrl, SseType.main);
+            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
             casperClient.SseService.Step += SseService_Step;
 
             while (!isEventTriggered && stopwatch.ElapsedMilliseconds < 20000)

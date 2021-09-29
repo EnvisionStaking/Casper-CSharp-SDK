@@ -4,8 +4,8 @@ using System.Text;
 
 namespace EnvisionStaking.Casper.SDK.Enums
 {
-    public enum SseType
+    public enum PrefixOptionEnum
     {
-        main, deploys,sigs
+        OptionNone = 0, OptionSome = 1
     }
 }

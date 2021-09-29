@@ -1,5 +1,6 @@
 ﻿using EnvisionStaking.Casper.SDK.Model.Common;
 using EnvisionStaking.Casper.SDK.Model.DeployObject;
+using EnvisionStaking.Casper.SDK.Serialization;
 using EnvisionStaking.Casper.SDK.Utils;
 using Newtonsoft.Json;
 using System;
@@ -29,7 +30,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             return rpcSvc.PutDeploy(deploy);
         }
 
-        public PutDeployRequest MakeDeploy(float amount, string fromAccount, int id)
+        public PutDeployRequest MakeDeploy(UInt64 amount, string fromAccount, int id)
         {
             PutDeployRequest putDeployRequest = new PutDeployRequest();
             putDeployRequest.id = rpcSvc.JsonRpcId;
@@ -63,7 +64,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             putDeployRequest.Parameters.deploy.payment.ModuleBytes.module_bytes = "";
 
             var argsPayment = new List<KeyValuePair<string, CLValue>>();
-            argsPayment.Add(new KeyValuePair<string, CLValue>("amount", new CLValue() { cl_type = "U512", bytes = ByteUtil.ByteArrayToString(BitConverter.GetBytes(amount)), parsed = amount.ToString() }));
+            argsPayment.Add(new KeyValuePair<string, CLValue>("amount", new CLValue() { cl_type = "U512", bytes = ByteUtil.ByteArrayToHex(BitConverter.GetBytes(amount)), parsed = amount.ToString() }));
 
             putDeployRequest.Parameters.deploy.payment.ModuleBytes.argsObject = argsPayment;
 
@@ -73,16 +74,20 @@ namespace EnvisionStaking.Casper.SDK.Services
             putDeployRequest.Parameters.deploy.transfer.ModuleBytes = new ModuleBytes();
             putDeployRequest.Parameters.deploy.transfer.ModuleBytes.module_bytes = "";
 
+            string amountBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512Serializer(amount));
+            string accountHash = hashSvc.GetAccountHash(fromAccount);
+            string idBytes = hashSvc.GetAccountHash(fromAccount);
+
             var argsTransfer = new List<KeyValuePair<string, CLValue>>();
-            argsTransfer.Add(new KeyValuePair<string, CLValue>("amount", new CLValue() { cl_type = "U512", bytes = ByteUtil.ByteArrayToString(BitConverter.GetBytes(amount)), parsed = amount.ToString() }));
-            argsTransfer.Add(new KeyValuePair<string, CLValue>("target", new CLValue() { cl_type = "PublicKey", bytes = hashSvc.GetAccountHash(fromAccount) , parsed = hashSvc.GetAccountHash(fromAccount) }));
-            argsTransfer.Add(new KeyValuePair<string, CLValue>("id", new CLValue() { cl_type = "U64", bytes = ByteUtil.ByteArrayToString(BitConverter.GetBytes(id)), parsed = id.ToString() }));
+            argsTransfer.Add(new KeyValuePair<string, CLValue>("amount", new CLValue() { cl_type = "U512", bytes = amountBytes, parsed = amount.ToString() }));
+            argsTransfer.Add(new KeyValuePair<string, CLValue>("target", new CLValue() { cl_type = "PublicKey", bytes = accountHash, parsed = accountHash }));
+            argsTransfer.Add(new KeyValuePair<string, CLValue>("id", new CLValue() { cl_type = "U64", bytes = ByteUtil.ByteArrayToHex(BitConverter.GetBytes(id)), parsed = id.ToString() }));
 
             putDeployRequest.Parameters.deploy.transfer.ModuleBytes.argsObject = argsTransfer;
             return putDeployRequest;
         }
 
-        public string MakeDeployToJson(float amount, string fromAccount, int id)
+        public string MakeDeployToJson(UInt64 amount, string fromAccount, int id)
         {
             return JsonConvert.SerializeObject(MakeDeploy(amount, fromAccount, id));
         }
