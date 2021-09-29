@@ -2,10 +2,8 @@
 using EnvisionStaking.Casper.SDK.Model.Sse;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EnvisionStaking.Casper.SDK.Services
