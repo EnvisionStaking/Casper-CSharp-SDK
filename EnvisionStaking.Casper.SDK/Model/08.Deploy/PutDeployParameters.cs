@@ -39,47 +39,47 @@ namespace EnvisionStaking.Casper.SDK.Model.DeployObject
 
     public class PutDeploySession
     {
-        public PutDeployTransfer Transfer { get; set; }
+        public DeployTransfer Transfer { get; set; }
     }
-    [Serializable]
-    public class PutDeployTransfer
-    {
-        [JsonProperty("args")]
-        //[field: NonSerialized]
-        public List<List<object>> argsJson { get; set; }
+    //[Serializable]
+    //public class PutDeployTransfer
+    //{
+    //    [JsonProperty("args")]
+    //    //[field: NonSerialized]
+    //    public List<List<object>> argsJson { get; set; }
 
-        [field: NonSerialized]
-        [JsonIgnore]
-        public List<KeyValuePair<string, CLValue>> argsObject
-        {
-            get
-            {
-                List<KeyValuePair<string, CLValue>> result = new List<KeyValuePair<string, CLValue>>();
+    //    [field: NonSerialized]
+    //    [JsonIgnore]
+    //    public List<KeyValuePair<string, CLValue>> argsObject
+    //    {
+    //        get
+    //        {
+    //            List<KeyValuePair<string, CLValue>> result = new List<KeyValuePair<string, CLValue>>();
 
-                foreach (var row in argsJson)
-                {
-                    result.Add(new KeyValuePair<string, CLValue>(row[0].ToString(), JsonConvert.DeserializeObject<CLValue>(row[1].ToString())));
-                }
+    //            foreach (var row in argsJson)
+    //            {
+    //                result.Add(new KeyValuePair<string, CLValue>(row[0].ToString(), JsonConvert.DeserializeObject<CLValue>(row[1].ToString())));
+    //            }
 
-                return result;
-            }
-            set
-            {
-                List<List<object>> jsonObject = new List<List<object>>();
+    //            return result;
+    //        }
+    //        set
+    //        {
+    //            List<List<object>> jsonObject = new List<List<object>>();
 
-                foreach (var row in value)
-                {
-                    List<object> temp = new List<object>();
-                    temp.Add(row.Key);
-                    temp.Add(row.Value);
-                    jsonObject.Add(temp);
-                }
-                if (argsJson == null)
-                {
-                    argsJson = new List<List<object>>();
-                }
-                argsJson = jsonObject;
-            }
-        }
-    }
+    //            foreach (var row in value)
+    //            {
+    //                List<object> temp = new List<object>();
+    //                temp.Add(row.Key);
+    //                temp.Add(row.Value);
+    //                jsonObject.Add(temp);
+    //            }
+    //            if (argsJson == null)
+    //            {
+    //                argsJson = new List<List<object>>();
+    //            }
+    //            argsJson = jsonObject;
+    //        }
+    //    }
+    //}
 }

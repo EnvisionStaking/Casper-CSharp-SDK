@@ -69,10 +69,12 @@ namespace EnvisionStaking.Casper.SDK.Services
             return putDeployRequest;
         }
 
-        private string GetBodyHash(PutDeployPayment payment, PutDeployTransfer transfer)
+        private string GetBodyHash(PutDeployPayment payment, DeployTransfer transfer)
         {
+            byte[] transferBytes = ByteUtil.SerializeToByteArray(transfer);
+
             byte[] paymentBytes = ByteUtil.SerializeToByteArray(payment.ModuleBytes.argsJson);
-            byte[] transferBytes = ByteUtil.SerializeToByteArray(transfer.argsJson);
+            
 
             byte[] combined = ByteUtil.CombineBytes(paymentBytes, transferBytes);
 
@@ -95,18 +97,18 @@ namespace EnvisionStaking.Casper.SDK.Services
             return payment;
         }
 
-        private PutDeployTransfer NewTransfer(ulong amount, string fromAccount, ulong id)
+        private DeployTransfer NewTransfer(ulong amount, string fromAccount, ulong id)
         {
             string amountBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512Serializer(amount));
             string accountHash = hashSvc.GetAccountHash(fromAccount);
             string idBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu64Serializer(id));
 
-            var argsTransfer = new List<KeyValuePair<string, CLValue>>();
-            argsTransfer.Add(new KeyValuePair<string, CLValue>("amount", new CLValue() { cl_type = "U512", bytes = amountBytes, parsed = amount.ToString() }));
-            argsTransfer.Add(new KeyValuePair<string, CLValue>("target", new CLValue() { cl_type = "PublicKey", bytes = accountHash, parsed = accountHash }));
-            argsTransfer.Add(new KeyValuePair<string, CLValue>("id", new CLValue() { cl_type = "U64", bytes = idBytes, parsed = id.ToString() }));
+            var argsTransfer = new List<DeployNamedArg>();
+            argsTransfer.Add(new DeployNamedArg("amount", new CLValue() { cl_type = "U512", bytes = amountBytes, parsed = amount.ToString() }));
+            argsTransfer.Add(new DeployNamedArg("target", new CLValue() { cl_type = "PublicKey", bytes = accountHash, parsed = accountHash }));
+            argsTransfer.Add(new DeployNamedArg("id", new CLValue() { cl_type = "U64", bytes = idBytes, parsed = id.ToString() }));
 
-            return new PutDeployTransfer() { argsObject = argsTransfer };
+            return new DeployTransfer(argsTransfer);
         }
 
         public string MakeDeployToJson(UInt64 amount, string fromAccount, UInt64 id)

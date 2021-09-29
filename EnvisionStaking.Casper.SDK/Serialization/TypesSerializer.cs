@@ -43,5 +43,18 @@ namespace EnvisionStaking.Casper.SDK.Serialization
             return ByteUtil.PrefixOption(bytes);
         }
 
+        public static byte[] Getu32Serializer(int value)
+        {
+            int maxBytes = 4;
+            byte[] bytes = BitConverter.GetBytes(value);
+
+            if (bytes.Length > maxBytes)
+            {
+                throw new ArgumentOutOfRangeException($"Value is out of range");
+            }
+
+            return ByteUtil.PrefixOption(bytes);
+        }
+
     }
 }
