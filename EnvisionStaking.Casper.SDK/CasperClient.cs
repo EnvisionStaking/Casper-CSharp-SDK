@@ -22,5 +22,7 @@ namespace EnvisionStaking.Casper.SDK
         public HashService HashService { get; }
         public DeployService DeployService  { get; }
 
+        public SseService SseService { get; set; }
+
     }
 }
