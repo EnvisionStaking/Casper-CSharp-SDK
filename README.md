@@ -1,6 +1,6 @@
 # Development Status
 
-## Completed Tasks - Unit Tests Completed -Regression Test pending
+## Completed Tasks - Unit Testing Completed - Regression Testing pending
 ### RPC Service Synchronous Operations
 * RPC Service -> GetStateRootHash
 * RPC Service -> GetStateRootHashByBlockHash
@@ -48,10 +48,14 @@
 * Signing Service - Ed25519  -> GetSignature
 * Signing Service - Ed25519  -> VerifySignature
 
-## Completed Tasks - Not able to Unit Test - Regression Test pending
+
+
+## Completed Tasks - Not able to Unit Testing - Regression Testing pending
 * RPC Service -> GetEraInfoLast
 * RPC Service -> GetEraInfoByHash
 * RPC Service -> GetEraInfoByHeight
+
+
 
 ## Work In Progress
 * Signing Service - Ed25519  -> ConvertPrivateKeyToPemAndSaveToDisk
@@ -65,9 +69,11 @@
 * Signing Service - secp256k1  -> ConvertPublicKeyToPemAndSaveToDisk
 * RPC Service -> PutDeploy
 
+
+
 ## Not Started Tasks
-*Add Comments in code
-*End-to-end solution example
-*How-to guides: make a transfer, delegate / undelegate, install/execute ERC-20 contract
-*YouTube videos illustrating how-to guides
+* Add Comments in code
+* End-to-end solution example
+* How-to guides: make a transfer, delegate / undelegate, install/execute ERC-20 contract
+* YouTube videos illustrating how-to guides
 	
