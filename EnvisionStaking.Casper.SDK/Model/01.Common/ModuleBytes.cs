@@ -9,6 +9,7 @@ using EnvisionStaking.Casper.SDK.Model.Common.Argument;
 
 namespace EnvisionStaking.Casper.SDK.Model.Common
 {
+    [Serializable]
     public partial class ModuleBytes
     {
         public string module_bytes { get; set; }
@@ -16,7 +17,8 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
         [JsonProperty("args")]
         public List<List<object>> argsJson { get; set; }
 
-        [JsonIgnore]
+        [field: NonSerialized]
+        [JsonIgnore]       
         public List<KeyValuePair<string, CLValue>> argsObject
         {
             get
