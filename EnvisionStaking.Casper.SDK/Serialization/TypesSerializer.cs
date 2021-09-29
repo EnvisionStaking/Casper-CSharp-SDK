@@ -8,26 +8,40 @@ namespace EnvisionStaking.Casper.SDK.Serialization
 {
     public static class TypesSerializer
     {
-        public static byte[] Getu512Serializer(ulong value)
-        { 
-            byte[] bytes = BitConverter.GetBytes(value);
-            byte[] byteResult;
+        public static byte[] Getu512Serializer(decimal value)
+        {
+            int maxBytes = 32;
+            BigInteger bigInt = new BigInteger(value);
+            byte[] bytes = bigInt.ToByteArray();
+
+            if (bytes.Length > maxBytes)
+            {
+                throw new ArgumentOutOfRangeException($"Value is out of range");
+            }
 
             // Remove tailing zeros
-            if (bytes.Length > 1 && bytes[0] == 0)
-            {
-                bytes = ByteUtil.RemoveTrailingZeros(bytes);
-            }
+            bytes = ByteUtil.RemoveTrailingZeros(bytes);
 
             //Return the hex of the length byte, plus the reversed byte array of the number
             byte[] lengthByte = new byte[1];
             lengthByte[0] = (byte)bytes.Length;
 
-            byteResult = ByteUtil.CombineBytes(lengthByte, bytes);
-            return byteResult;
+            bytes = ByteUtil.CombineBytes(lengthByte, bytes);
+            return bytes;
         }
 
-      
+        public static byte[] Getu64Serializer(ulong value)
+        {
+            int maxBytes = 8;
+            byte[] bytes = BitConverter.GetBytes(value);
+
+            if (bytes.Length > maxBytes)
+            {
+                throw new ArgumentOutOfRangeException($"Value is out of range");
+            }
+
+            return ByteUtil.PrefixOption(bytes);
+        }
 
     }
 }

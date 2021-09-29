@@ -19,15 +19,27 @@ namespace EnvisionStaking.Casper.SDK.Test
         [TestMethod]
         public void Getu512Serializer()
         {
-            float amount = 5000000000000;
+            UInt64 amount = 5000000000000;
             string correctResultAmount = "06005039278c04";
 
-            byte[] result= TypesSerializer.Getu512Serializer(5000000000000);
+            byte[] result = TypesSerializer.Getu512Serializer(5000000000000);
 
             string hex = ByteUtil.ByteArrayToHex(result);
 
             Assert.AreEqual(correctResultAmount, hex);
         }
 
+        [TestMethod]
+        public void Getu64Serializer()
+        {
+            ulong value = 1061;
+            string correctResult = "012504000000000000";
+
+            byte[] result = TypesSerializer.Getu64Serializer(value);
+
+            string hex = ByteUtil.ByteArrayToHex(result);
+
+            Assert.AreEqual(correctResult, hex);
+        }
     }
 }

@@ -30,21 +30,20 @@ namespace EnvisionStaking.Casper.SDK.Services
             return rpcSvc.PutDeploy(deploy);
         }
 
-        public PutDeployRequest MakeDeploy(UInt64 amount, string fromAccount, int id)
+        public PutDeployRequest MakeDeploy(UInt64 amount, string fromAccount, UInt64 id)
         {
             PutDeployRequest putDeployRequest = new PutDeployRequest();
             putDeployRequest.id = rpcSvc.JsonRpcId;
             putDeployRequest.jsonrpc = rpcSvc.JsonRpcVersion;
             putDeployRequest.Parameters = new PutDeployParameters();
             putDeployRequest.Parameters.deploy = new PutDeployDeploy();
-            //Set Deploy Hash
-            putDeployRequest.Parameters.deploy.hash = "bce3326a8bc2104e0acafde7f7bb154aa258265e563fb37b3386220942bdb368";
+
             //Set Header
             putDeployRequest.Parameters.deploy.header = new PutDeployHeader();
             putDeployRequest.Parameters.deploy.header.account = fromAccount;
             putDeployRequest.Parameters.deploy.header.timestamp = DateTime.Now;
             putDeployRequest.Parameters.deploy.header.ttl = "30m";
-            putDeployRequest.Parameters.deploy.header.gas_price = 1;
+            putDeployRequest.Parameters.deploy.header.gas_price = 10;
             putDeployRequest.Parameters.deploy.header.body_hash = "418c521b564a606b0de4b5bfc572c0b93e4d7e6d1a20abb5d4d957d239dd9d9b";
             putDeployRequest.Parameters.deploy.header.dependencies = new List<string>();
             putDeployRequest.Parameters.deploy.header.chain_name = "casper";
@@ -63,8 +62,11 @@ namespace EnvisionStaking.Casper.SDK.Services
             putDeployRequest.Parameters.deploy.payment.ModuleBytes = new ModuleBytes();
             putDeployRequest.Parameters.deploy.payment.ModuleBytes.module_bytes = "";
 
+            decimal standardPayment = 10000000000;
+            string standardPaymentByte = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512Serializer(standardPayment));
+
             var argsPayment = new List<KeyValuePair<string, CLValue>>();
-            argsPayment.Add(new KeyValuePair<string, CLValue>("amount", new CLValue() { cl_type = "U512", bytes = ByteUtil.ByteArrayToHex(BitConverter.GetBytes(amount)), parsed = amount.ToString() }));
+            argsPayment.Add(new KeyValuePair<string, CLValue>("amount", new CLValue() { cl_type = "U512", bytes = standardPaymentByte, parsed = standardPayment.ToString() }));
 
             putDeployRequest.Parameters.deploy.payment.ModuleBytes.argsObject = argsPayment;
 
@@ -76,18 +78,22 @@ namespace EnvisionStaking.Casper.SDK.Services
 
             string amountBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512Serializer(amount));
             string accountHash = hashSvc.GetAccountHash(fromAccount);
-            string idBytes = hashSvc.GetAccountHash(fromAccount);
+            string idBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu64Serializer(id));
 
             var argsTransfer = new List<KeyValuePair<string, CLValue>>();
             argsTransfer.Add(new KeyValuePair<string, CLValue>("amount", new CLValue() { cl_type = "U512", bytes = amountBytes, parsed = amount.ToString() }));
             argsTransfer.Add(new KeyValuePair<string, CLValue>("target", new CLValue() { cl_type = "PublicKey", bytes = accountHash, parsed = accountHash }));
-            argsTransfer.Add(new KeyValuePair<string, CLValue>("id", new CLValue() { cl_type = "U64", bytes = ByteUtil.ByteArrayToHex(BitConverter.GetBytes(id)), parsed = id.ToString() }));
+            argsTransfer.Add(new KeyValuePair<string, CLValue>("id", new CLValue() { cl_type = "U64", bytes = idBytes, parsed = id.ToString() }));
+
+            //Set Deploy Hash
+
+            putDeployRequest.Parameters.deploy.hash = "bce3326a8bc2104e0acafde7f7bb154aa258265e563fb37b3386220942bdb368";
 
             putDeployRequest.Parameters.deploy.transfer.ModuleBytes.argsObject = argsTransfer;
             return putDeployRequest;
         }
 
-        public string MakeDeployToJson(UInt64 amount, string fromAccount, int id)
+        public string MakeDeployToJson(UInt64 amount, string fromAccount, UInt64 id)
         {
             return JsonConvert.SerializeObject(MakeDeploy(amount, fromAccount, id));
         }
