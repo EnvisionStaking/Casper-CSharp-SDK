@@ -49,9 +49,9 @@
 * Signing Service - Ed25519  -> VerifySignature
 
 ## Completed Tasks - Not able to Unit Test - Regression Test pending
-GetEraInfoLast
-GetEraInfoByHash
-GetEraInfoByHeight
+* RPC Service -> GetEraInfoLast
+* RPC Service -> GetEraInfoByHash
+* RPC Service -> GetEraInfoByHeight
 
 ## Work In Progress
 * Signing Service - Ed25519  -> ConvertPrivateKeyToPemAndSaveToDisk
