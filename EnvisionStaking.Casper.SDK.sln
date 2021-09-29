@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnvisionStaking.Casper.SDK", "EnvisionStaking.Casper.SDK\EnvisionStaking.Casper.SDK.csproj", "{6FD0C5C8-9FED-405C-8ECB-87003CB28616}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvisionStaking.Casper.SDK.Test", "EnvisionStaking.Casper.SDK.Test\EnvisionStaking.Casper.SDK.Test.csproj", "{A4E6D8CF-122A-4DD6-90EF-9C78D6D88924}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnvisionStaking.Casper.SDK.Test", "EnvisionStaking.Casper.SDK.Test\EnvisionStaking.Casper.SDK.Test.csproj", "{A4E6D8CF-122A-4DD6-90EF-9C78D6D88924}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CA4A64DA-EB2D-4B88-89C3-752FBD9A1D4B}"
+	ProjectSection(SolutionItems) = preProject
+		EnvisionStaking.Casper.SDK\README.md = EnvisionStaking.Casper.SDK\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
