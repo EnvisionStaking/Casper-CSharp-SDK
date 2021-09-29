@@ -1,6 +1,6 @@
 # Development Status ~ 80% completion
 
-## Completed Tasks - Unit Testing Completed - Regression Testing pending
+## Completed Tasks - Unit Tests Completed - Regression Test pending
 ### RPC Service Synchronous Operations
 * RPC Service -> GetStateRootHash
 * RPC Service -> GetStateRootHashByBlockHash
@@ -50,7 +50,7 @@
 
 
 
-## Completed Tasks - Not able to Unit Testing - Regression Testing pending
+## Completed Tasks - Not able to Unit Test - Regression Test pending
 * RPC Service -> GetEraInfoLast
 * RPC Service -> GetEraInfoByHash
 * RPC Service -> GetEraInfoByHeight
