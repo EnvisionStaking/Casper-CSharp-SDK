@@ -34,7 +34,7 @@ namespace EnvisionStaking.Casper.SDK.Model.DeployObject
     [Serializable]
     public class PutDeployPayment
     {
-        public ModuleBytes ModuleBytes { get; set; }     
+        public DeployModuleBytes ModuleBytes { get; set; }     
     }
 
     public class PutDeploySession

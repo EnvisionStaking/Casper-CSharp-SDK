@@ -1,6 +1,7 @@
 ﻿using EnvisionStaking.Casper.SDK.Enums;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -17,9 +18,31 @@ namespace EnvisionStaking.Casper.SDK.Utils
             return bytes;
         }
 
+        public static byte[] StringToByteArray(string value)
+        {
+            return Encoding.ASCII.GetBytes(value);
+        }
+
         public static string ByteArrayToHex(byte[] byteArray)
         {
             return BitConverter.ToString(byteArray).Replace("-", "").ToLower();
+        }
+
+        public static byte[] HexToByteArray(string hexString)
+        {
+            if (hexString.Length % 2 != 0)
+            {
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, "The binary key cannot have an odd number of digits: {0}", hexString));
+            }
+
+            byte[] data = new byte[hexString.Length / 2];
+            for (int index = 0; index < data.Length; index++)
+            {
+                string byteValue = hexString.Substring(index * 2, 2);
+                data[index] = byte.Parse(byteValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+            }
+
+            return data;
         }
 
         public static byte[] GetLastNBytes(byte[] toTruncate, int length)
@@ -45,8 +68,8 @@ namespace EnvisionStaking.Casper.SDK.Utils
         }
 
         public static byte[] RemoveTrailingZeros(byte[] bytes)
-        {           
-            for (int i = bytes.Length-1; i >= 0; i--)
+        {
+            for (int i = bytes.Length - 1; i >= 0; i--)
             {
                 if (bytes[i] == 0)
                 {
@@ -104,6 +127,12 @@ namespace EnvisionStaking.Casper.SDK.Utils
                 var obj = (T)binForm.Deserialize(memStream);
                 return obj;
             }
+        }
+
+        public static byte[] ResizeByteArray(byte[] bytes, int newSize)
+        {
+            Array.Resize<byte>(ref bytes, newSize);
+            return bytes;
         }
     }
 }

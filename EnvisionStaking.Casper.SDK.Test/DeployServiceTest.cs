@@ -27,7 +27,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void MakeDeploy()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeploy(856644189000, "0202ba37a693fb6494b3c42a65f07a6123dd125d8bf8a16e10ec7b95b826b151230c", 1061);
+            var makeDeployResult = casperClient.DeployService.MakeDeploy(5000000000000, "01ddf755862dcde8de3e7ff13d9c42481d39e422cc461518bb12b8fb0c9366c79c", 1);
 
             Assert.IsNotNull(makeDeployResult);
         }
@@ -36,7 +36,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void MakeDeployToJson()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeployToJson(856644189000, "0202ba37a693fb6494b3c42a65f07a6123dd125d8bf8a16e10ec7b95b826b151230c", 1061);
+            var makeDeployResult = casperClient.DeployService.MakeDeployToJson(5000000000000, "01ddf755862dcde8de3e7ff13d9c42481d39e422cc461518bb12b8fb0c9366c79c", 1);
 
             Assert.IsNotNull(makeDeployResult);
         }

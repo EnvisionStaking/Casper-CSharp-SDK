@@ -1,4 +1,6 @@
 ﻿using EnvisionStaking.Casper.SDK.Interfaces;
+using EnvisionStaking.Casper.SDK.Serialization;
+using EnvisionStaking.Casper.SDK.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,12 +15,12 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
         [JsonProperty("module_bytes")]
         private byte[] moduleBytes;
 
-        private List<DeployNamedArg> args;
+        private List<DeployNamedArg> argsObject;
 
         public DeployExecutable(byte[] moduleBytes, List<DeployNamedArg> args)
         {
             this.moduleBytes = moduleBytes;
-            this.args = args;
+            this.argsObject = args;
         }
 
         public byte[] GetModuleBytes()
@@ -28,25 +30,56 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
 
         public List<DeployNamedArg> GetArgs()
         {
-            return this.args;
-        }        
+            return this.argsObject;
+        }
 
+        [JsonProperty("args")]
+        public List<List<object>> argsJson
+        {
+            get
+            {
+                List<List<object>> jsonObject = new List<List<object>>();
+
+                foreach (var row in argsObject)
+                {
+                    List<object> temp = new List<object>();
+                    temp.Add(row.GetName());
+                    temp.Add(row.GetValue());
+                    jsonObject.Add(temp);
+                }
+                if (jsonObject == null || jsonObject.Count==0)
+                {
+                    return new List<List<object>>();
+                }
+                return jsonObject;
+            }
+        }
         public DeployNamedArg GetNamedArg(String name)
         {
-            if ((this.args != null))
+            if ((this.argsObject != null))
             {
-                foreach (DeployNamedArg arg in this.args)
+                foreach (DeployNamedArg arg in this.argsObject)
                 {
-                    if (string.Compare(arg.GetName(), name, true) ==0)
+                    if (string.Compare(arg.GetName(), name, true) == 0)
                     {
                         return arg;
                     }
-
                 }
-
             }
 
             return null;
-        }        
+        }
+
+        protected byte[] ToBytes()
+        {
+            byte[] bytes = TypesSerializer.Getu32Serializer(argsObject.Count);
+
+            foreach (var arg in argsObject)
+            {
+                bytes = ByteUtil.CombineBytes(bytes, arg.ToBytes());
+            }
+
+            return bytes;
+        }
     }
 }
