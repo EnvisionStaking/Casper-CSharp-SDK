@@ -250,15 +250,11 @@ namespace EnvisionStaking.Casper.SDK.Services
             request.id = JsonRpcId;
             var resultJson = RpcClient<DeployRequest>(RpCUrl, request, HttpMethod.Post);
 
-            //return JsonConvert.DeserializeObject<DeployResult>(resultJson, EnvisionStaking.Casper.SDK.Model.Common.Argument.Converter.Settings);
             return RpcClient<DeployRequest, DeployResult>(RpCUrl, request, HttpMethod.Post);
         }
 
-        public PutDeployResult PutDeploy(Deploy deploy)
+        public PutDeployResult PutDeploy(PutDeployRequest request)
         {
-            PutDeployRequest request = new PutDeployRequest(deploy);
-            request.jsonrpc = JsonRpcVersion;
-            request.id = JsonRpcId;
 
             return RpcClient<PutDeployRequest, PutDeployResult>(RpCUrl, request, HttpMethod.Post);
         }
@@ -463,7 +459,7 @@ namespace EnvisionStaking.Casper.SDK.Services
                 string result = response.Content.ReadAsStringAsync().Result;
                 return result;
             }
-        }    
+        }
 
         private string HandleRpcException(Error error)
         {

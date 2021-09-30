@@ -11,17 +11,25 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
     [Serializable]
     public class DeployModuleBytes : DeployExecutable,IHasTag
     {
-        public string module_bytes { get; set; }
-
-        [JsonProperty("module_bytes")]
-        private byte[] moduleBytes;
-
-        public DeployModuleBytes(byte[] moduleBytes, List<DeployNamedArg> args) : base(moduleBytes, args)
+        public DeployModuleBytes(string moduleBytesString, byte[] moduleBytes, List<DeployNamedArg> args) : base(args)
         {
+            this.ModuleBytes = moduleBytes;
+            this.module_bytes = moduleBytesString;
         }
 
-        public DeployModuleBytes(List<DeployNamedArg> amountArg) : base(new byte[0], amountArg)
+        public DeployModuleBytes(List<DeployNamedArg> amountArg) : base(amountArg)
         {
+            this.ModuleBytes = new byte[0];
+        }
+
+        public string module_bytes { get; set; }
+
+        private byte[] ModuleBytes;
+
+
+        public byte[] GetModuleBytes()
+        {
+            return this.ModuleBytes;
         }
 
         public int GetTag()

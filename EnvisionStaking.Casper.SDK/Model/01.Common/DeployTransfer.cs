@@ -11,11 +11,7 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
     public class DeployTransfer : DeployExecutable,IHasTag
     {
 
-        public DeployTransfer(byte[] moduleBytes, List<DeployNamedArg> args) : base(moduleBytes, args)
-        {
-        }
-
-        public DeployTransfer(List<DeployNamedArg> amountArg) : base(new byte[0], amountArg)
+        public DeployTransfer(List<DeployNamedArg> args) : base(args)
         {
         }
 

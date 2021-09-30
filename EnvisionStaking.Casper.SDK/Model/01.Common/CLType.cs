@@ -67,7 +67,7 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
             ANY = 21,
             /** NO DEF IN SPEC https://docs.casperlabs.io/en/latest/implementation/serialization-standard.html */
             //@CLName("PublicKey")
-            PUBLIC_KEY = 22
+            PublicKey = 22
         };
 
         private CLTypeEnum clTypeEnum;

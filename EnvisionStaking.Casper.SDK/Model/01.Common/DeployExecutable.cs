@@ -10,23 +10,14 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
 {
     [Serializable]
     public abstract class DeployExecutable
-    {
-
-        [JsonProperty("module_bytes")]
-        private byte[] moduleBytes;
+    {       
 
         private List<DeployNamedArg> argsObject;
 
-        public DeployExecutable(byte[] moduleBytes, List<DeployNamedArg> args)
+        public DeployExecutable(List<DeployNamedArg> args)
         {
-            this.moduleBytes = moduleBytes;
             this.argsObject = args;
-        }
-
-        public byte[] GetModuleBytes()
-        {
-            return this.moduleBytes;
-        }
+        }       
 
         public List<DeployNamedArg> GetArgs()
         {
