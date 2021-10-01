@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 
 namespace EnvisionStaking.Casper.SDK.Test
-{   
+{
 
     [TestClass]
     public class SigningServiceTest
@@ -29,7 +29,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         }
 
         [TestMethod]
-        public void VerifySignatureByGeneratedKeyPair2()
+        public void VerifySignatureByGeneratedKeyPairChangeMessage()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
             var keyPair = casperClient.SigningService.GenerateKeyPair();
@@ -60,7 +60,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         }
 
         [TestMethod]
-        public void VerifySignatureByKeyPairFromFile2()
+        public void VerifySignatureByKeyPairFromFileChangeMessage()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
             var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\public_key.pem", @"keys\secret_key.pem");
@@ -76,20 +76,26 @@ namespace EnvisionStaking.Casper.SDK.Test
         }
 
         [TestMethod]
-        public void GenerateAndSaveKeys()
+        public void VerifySignatureByKeyPairFromFileFromDeployHash()
         {
+            // Deploy hash in bytes
+            byte[] message = {
+                (byte) 153, (byte) 144, (byte) 19, (byte) 83, (byte) 219, (byte) 161, (byte) 143, (byte) 137, (byte) 59,
+                (byte) 67, (byte) 187, (byte) 238, (byte) 65, (byte) 111, (byte) 80, (byte) 243, (byte) 142, (byte) 77,
+                (byte) 113, (byte) 46, (byte) 2, (byte) 166, (byte) 121, (byte) 118, (byte) 34, (byte) 205, (byte) 123,
+                (byte) 14, (byte) 215, (byte) 85, (byte) 234, (byte) 161
+        };
+
             CasperClient casperClient = new CasperClient(rpcUrl);
+            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\public_key.pem", @"keys\secret_key.pem");
 
-            var keyPair = casperClient.SigningService.GenerateKeyPair();
+            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, message);           
 
-            var privateKeyPem = casperClient.SigningService.ConvertPrivateKeyToPem(keyPair.Private);
-            var publicKeyPem = casperClient.SigningService.ConvertPublicKeyToPem(keyPair.Public);
+            bool signatureIsVerified = casperClient.SigningService.VerifySignature(keyPair.Public, message, signedMessage);
 
-            File.WriteAllText(@"keys\secret_key.pem", privateKeyPem);
-            File.WriteAllText(@"keys\public_key.pem", publicKeyPem);
-
-            Assert.IsTrue(!string.IsNullOrEmpty(privateKeyPem));
-        }
+            Assert.AreEqual(signedMessage.Length, 64);
+            Assert.IsTrue(signatureIsVerified);
+        }       
 
         [TestMethod]
         public void ConvertPrivateKeyToPem()

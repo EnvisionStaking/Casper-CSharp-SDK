@@ -1,4 +1,4 @@
-# Development Status ~ 80% completion
+# Development Status ~ 85% completion
 
 ## Completed Tasks - Unit Tests Completed - Regression Test pending
 ### RPC Service Synchronous Operations
@@ -47,7 +47,8 @@
 * Signing Service - Ed25519  -> GenerateKeyPair
 * Signing Service - Ed25519  -> GetSignature
 * Signing Service - Ed25519  -> VerifySignature
-
+* Signing Service - Ed25519  -> ConvertPrivateKeyToPemAndSaveToDisk
+* Signing Service - Ed25519  -> ConvertPublicKeyToPemAndSaveToDisk
 
 
 ## Completed Tasks - Not able to Unit Test - Regression Test pending
@@ -58,8 +59,7 @@
 
 
 ## Work In Progress
-* Signing Service - Ed25519  -> ConvertPrivateKeyToPemAndSaveToDisk
-* Signing Service - Ed25519  -> ConvertPublicKeyToPemAndSaveToDisk
+
 * Signing Service - secp256k1  -> GetKeyPairFromFile
 * Signing Service - secp256k1   -> GetKeyPair
 * Signing Service - secp256k1   -> GenerateKeyPair

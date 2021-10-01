@@ -7,13 +7,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Keys\private.pem" />
+    <None Remove="Keys\public.pem" />
     <None Remove="Keys\public_key.pem" />
+    <None Remove="Keys\public_key_hex" />
+    <None Remove="Keys\secret_key.pem" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Keys\public_key.pem">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <Content Include="Keys\private.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keys\public.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Keys\public_key.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keys\public_key_hex">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keys\secret_key.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -24,12 +43,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EnvisionStaking.Casper.SDK\EnvisionStaking.Casper.SDK.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Keys\secret_key.pem">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
