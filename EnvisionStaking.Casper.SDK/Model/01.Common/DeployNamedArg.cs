@@ -1,4 +1,5 @@
-﻿using EnvisionStaking.Casper.SDK.Utils;
+﻿using EnvisionStaking.Casper.SDK.Serialization;
+using EnvisionStaking.Casper.SDK.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,8 +48,22 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
             bytes = ByteUtil.CombineBytes(bytes, this.GetValue().ToBytes());
 
             //Add CL Type Info
-            bytes = ByteUtil.CombineBytes(bytes, new byte[] { (byte)GetCLTypeInfo()});
+            if (this.value.cl_type == CLType.CLTypeEnum.BYTE_ARRAY)
+            {
+                bytes = ByteUtil.CombineBytes(bytes, new byte[] { (byte)GetCLTypeInfo() });
+                bytes = ByteUtil.CombineBytes(bytes, BitConverter.GetBytes(ByteUtil.HexToByteArray(this.value.bytes).Length));
+            }
+            else if (this.value.cl_type == CLType.CLTypeEnum.OPTION)
+            {
+                bytes = ByteUtil.CombineBytes(bytes, new byte[] { (byte)GetCLTypeInfo() });
+                bytes = ByteUtil.CombineBytes(bytes, new byte[] { (byte)CLType.CLTypeEnum.U64 });
+            }
+            else
+            {
+                bytes = ByteUtil.CombineBytes(bytes, new byte[] { (byte)GetCLTypeInfo() });
+            }
             return bytes;
         }
     }
 }
+

@@ -21,7 +21,7 @@ namespace EnvisionStaking.Casper.SDK.Serialization
 
             // Remove tailing zeros
             bytes = ByteUtil.RemoveTrailingZeros(bytes);
-           
+
             return bytes;
         }
 
@@ -41,21 +41,6 @@ namespace EnvisionStaking.Casper.SDK.Serialization
         {
             int maxBytes = 8;
             byte[] bytes = BitConverter.GetBytes(value);
-
-            if (bytes.Length > maxBytes)
-            {
-                throw new ArgumentOutOfRangeException($"Value is out of range");
-            }
-
-            return bytes;
-        }
-
-        public static byte[] Getu64SerializerTtl(string value, string removeChar)
-        {
-            long convertedValue = long.Parse(value.Replace(removeChar, ""));
-
-            int maxBytes = 8;
-            byte[] bytes = BitConverter.GetBytes(convertedValue);
 
             if (bytes.Length > maxBytes)
             {
@@ -119,20 +104,61 @@ namespace EnvisionStaking.Casper.SDK.Serialization
 
         public static byte[] GetPublicKeySerializer(string value)
         {
-            byte[] bytes = new byte[] { (byte)1 };
-            bytes = ByteUtil.CombineBytes(bytes, ByteUtil.HexToByteArray(value));
-            return bytes;
+            //byte[] bytes = new byte[] { (byte)1 };
+            //bytes = ByteUtil.CombineBytes(bytes, ByteUtil.HexToByteArray(value));
+            //return bytes;
+            return ByteUtil.HexToByteArray(value);
         }
 
         public static byte[] GetListSerializer(List<string> list)
         {
             byte[] bytes = Getu32Serializer(list.Count);
-            foreach(string item in list)
+            foreach (string item in list)
             {
                 bytes = ByteUtil.CombineBytes(bytes, ByteUtil.StringToByteArray(item));
             }
             return bytes;
         }
 
+        public static ulong GetTimeSerializerEpoch(DateTime date)
+        {
+            return (ulong)date.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+        }
+
+        public static byte[] GetTimeSerializerEpochBytes(DateTime date)
+        {
+            return BitConverter.GetBytes(GetTimeSerializerEpoch(date));
+        }
+
+        public static byte[] GetStringSerializerWithLength(string value)
+        {
+            byte[] valueBytes = ByteUtil.StringToByteArray(value);
+            byte[] lengthBytes = TypesSerializer.Getu32Serializer(valueBytes.Length);
+
+            byte[] bytes = ByteUtil.CombineBytes(lengthBytes, valueBytes);
+            return bytes;
+
+        }
+
+        public static byte[] GetTTLSerializer(string value)
+        {
+            long convertedValue = 0;
+            if (value.EndsWith("m"))
+            {
+                convertedValue = long.Parse(value.Replace("m", ""));
+                convertedValue *= 60000;
+            }
+            else if (value.EndsWith("s"))
+            {
+                convertedValue = long.Parse(value.Replace("s", ""));
+                convertedValue *= 1000;
+            }
+            else
+            {
+                throw new FormatException("Invalid format exception for TTL");
+            }
+
+            return BitConverter.GetBytes(convertedValue);
+        }
     }
 }

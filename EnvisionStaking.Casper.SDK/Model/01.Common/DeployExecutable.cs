@@ -35,7 +35,27 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
                 {
                     List<object> temp = new List<object>();
                     temp.Add(row.GetName());
-                    temp.Add(row.GetValue());
+                    if (row.GetValue().cl_type == CLType.CLTypeEnum.BYTE_ARRAY)
+                    {
+                        temp.Add(new {
+                            cl_type = new { ByteArray = row.GetValue().ToBytes().Length },
+                            bytes = row.GetValue().bytes,
+                            parsed = row.GetValue().parsed
+                        });
+                    }
+                    else if (row.GetValue().cl_type == CLType.CLTypeEnum.OPTION)
+                    {
+                        temp.Add(new
+                        {
+                            cl_type = new { Option = CLType.CLTypeEnum.U64.ToString() },
+                            bytes = row.GetValue().bytes,
+                            parsed = row.GetValue().parsed
+                        });
+                    }
+                    else
+                    {
+                        temp.Add(row.GetValue());
+                    }
                     jsonObject.Add(temp);
                 }
                 if (jsonObject == null || jsonObject.Count==0)

@@ -5,8 +5,8 @@ namespace EnvisionStaking.Casper.SDK.Test
     [TestClass]
     public class RpcServiceTest
     {
-        string rpcUrl = "http://40.69.22.98:7777/rpc";
-        string metricsUrl = "http://40.69.22.98:8888/metrics";
+        string rpcUrl = "http://54.183.43.215:7777/rpc";
+        string metricsUrl = "http://54.183.43.215:8888/metrics";
         string accountKey = "0202ba37a693fb6494b3c42a65f07a6123dd125d8bf8a16e10ec7b95b826b151230c";
         
         [TestMethod]

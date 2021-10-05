@@ -27,15 +27,15 @@ namespace EnvisionStaking.Casper.SDK.Services
         }
 
 
-        public PutDeployResult PutDeploy(UInt64 amount, string account, UInt64 id)
+        public PutDeployResult PutDeploy(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation)
         {
-            PutDeployRequest request = MakeDeploy(amount, account, id);
+            PutDeployRequest request = MakeDeploy(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation);
             return rpcSvc.PutDeploy(request);
         }
 
-        public PutDeployRequest MakeDeploy(UInt64 amount, string account, UInt64 id)
+        public PutDeployRequest MakeDeploy(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation)
         {
-            amount *= 1000000000;
+            var normAmount = (ulong)(amount * 1000000000);
             PutDeployRequest putDeployRequest = new PutDeployRequest();
             putDeployRequest.id = rpcSvc.JsonRpcId;
             putDeployRequest.jsonrpc = rpcSvc.JsonRpcVersion;
@@ -47,12 +47,12 @@ namespace EnvisionStaking.Casper.SDK.Services
 
             //Set Transfer
             putDeployRequest.Parameters.deploy.session = new PutDeploySession();
-            putDeployRequest.Parameters.deploy.session.Transfer = NewTransfer(amount, account, id);
+            putDeployRequest.Parameters.deploy.session.Transfer = NewTransfer(normAmount, toAccount, id);
 
             //Set Header
             putDeployRequest.Parameters.deploy.header = new PutDeployHeader();
-            putDeployRequest.Parameters.deploy.header.account = account;
-            putDeployRequest.Parameters.deploy.header.timestamp = DateTime.Now;
+            putDeployRequest.Parameters.deploy.header.account = fromAccount;
+            putDeployRequest.Parameters.deploy.header.timestamp = DateTime.Parse("2021-10-04T09:59:27.534000Z");
             putDeployRequest.Parameters.deploy.header.ttl = "30m";
             putDeployRequest.Parameters.deploy.header.gas_price = 10;
             putDeployRequest.Parameters.deploy.header.body_hash = GetBodyHash(putDeployRequest.Parameters.deploy.payment, putDeployRequest.Parameters.deploy.session.Transfer);
@@ -60,26 +60,40 @@ namespace EnvisionStaking.Casper.SDK.Services
             putDeployRequest.Parameters.deploy.header.chain_name = "casper";
 
             byte[] serializedHeader = GetSerializedHeader(putDeployRequest.Parameters.deploy.header);
-            string hashedHeader = hashSvc.GetHashToHex(serializedHeader);
-
-            //Set Approval
-            var keys = signingSvc.GenerateKeyPair();
-            putDeployRequest.Parameters.deploy.approvals = new List<Approval>();
-            putDeployRequest.Parameters.deploy.approvals.Add(new Approval()
-            {
-                signature = hashSvc.GetHashToHex(signingSvc.GetSignature(keys.Private, serializedHeader)),
-                signer = account
-
-            });
+            string hashedHeader = hashSvc.GetHashToHexFixedSize(serializedHeader, 32);
 
             //Set Deploy Hash
             putDeployRequest.Parameters.deploy.hash = hashedHeader;
+
+            //Set Approval
+            var keys = signingSvc.GetKeyPairFromFile(publicKeyLocation, privateKeyLocation);
+            putDeployRequest.Parameters.deploy.approvals = new List<Approval>();
+            putDeployRequest.Parameters.deploy.approvals.Add(CreateAndSignApproval(fromAccount, putDeployRequest.Parameters.deploy.hash, keys));
+            
             return putDeployRequest;
         }
 
-        public string MakeDeployToJson(UInt64 amount, string account, UInt64 id)
+        private Approval CreateAndSignApproval(string fromAccount, string deployHash, Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keys)
         {
-            return JsonConvert.SerializeObject(MakeDeploy(amount, account, id), JsonUtil.JsonSerializerSettings());
+            byte[] hashValueByte = ByteUtil.HexToByteArray(deployHash);
+            byte[] algorithm = hashSvc.GetAlgorithmBytes(fromAccount);
+
+            //Sign hash value
+            byte[] signature = signingSvc.GetSignature(keys.Private, hashValueByte);
+
+            //The fist byte within the signature is 1 in the case of an Ed25519 signature or 2 in the case of Secp256k1.
+            byte[] bytes = ByteUtil.CombineBytes(algorithm, signature);
+          
+            var approval = new Approval();
+            approval.signature = ByteUtil.ByteArrayToHex(bytes);
+            approval.signer = fromAccount;
+
+            return approval;
+        }
+
+        public string MakeDeployToJson(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation)
+        {
+            return JsonConvert.SerializeObject(MakeDeploy(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation), JsonUtil.JsonSerializerSettings());
         }
 
         public void SignDeploy()
@@ -98,26 +112,25 @@ namespace EnvisionStaking.Casper.SDK.Services
 
             //bytes = TypesSerializer.GetPublicKeySerializer(hashSvc.GetAccountHash(header.account))
             bytes = TypesSerializer.GetPublicKeySerializer(header.account);
-            bytes = ByteUtil.CombineBytes(bytes, TypesSerializer.Getu64Serializer(header.timestamp.ToBinary()));
-            bytes = ByteUtil.CombineBytes(bytes,TypesSerializer.Getu64SerializerTtl(header.ttl, "m"));
+            bytes = ByteUtil.CombineBytes(bytes, TypesSerializer.GetTimeSerializerEpochBytes(header.timestamp));
+            bytes = ByteUtil.CombineBytes(bytes, TypesSerializer.GetTTLSerializer(header.ttl));
             bytes = ByteUtil.CombineBytes(bytes, TypesSerializer.Getu64Serializer(header.gas_price));
             bytes = ByteUtil.CombineBytes(bytes,ByteUtil.HexToByteArray(header.body_hash));
             bytes = ByteUtil.CombineBytes(bytes, TypesSerializer.GetListSerializer(header.dependencies));
-            bytes = ByteUtil.CombineBytes(bytes, ByteUtil.StringToByteArray(header.chain_name));
+            bytes = ByteUtil.CombineBytes(bytes, TypesSerializer.GetStringSerializerWithLength(header.chain_name));
 
             return bytes;
         }
 
         private string GetBodyHash(PutDeployPayment payment, DeployTransfer transfer)
         {
-            byte[] transferBytes = transfer.ToBytes();
+            byte[] paymentBytes = payment.ModuleBytes.ToBytes();
 
-            byte[] paymentBytes = payment.ModuleBytes.ToBytes();           
+            byte[] transferBytes = transfer.ToBytes();                 
             
-
             byte[] combined = ByteUtil.CombineBytes(paymentBytes, transferBytes);
 
-            return hashSvc.GetHashToHex(combined);
+            return hashSvc.GetHashToHexFixedSize(combined, 32);
         }
 
         private PutDeployPayment NewPayment()
@@ -136,15 +149,15 @@ namespace EnvisionStaking.Casper.SDK.Services
             return payment;
         }
 
-        private DeployTransfer NewTransfer(ulong amount, string fromAccount, ulong id)
+        private DeployTransfer NewTransfer(ulong amount, string toAccount, ulong id)
         {
             string amountBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512SerializerWithLength(amount));
             string idBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu64SerializerWithPrefixOption(id));
-            string accountHex = hashSvc.GetAccountHash(fromAccount);
+
             var argsTransfer = new List<DeployNamedArg>();
             argsTransfer.Add(new DeployNamedArg("amount", new CLValue() { cl_type = CLType.CLTypeEnum.U512, bytes = amountBytes, parsed = amount.ToString() }));
-            argsTransfer.Add(new DeployNamedArg("target", new CLValue() { cl_type = CLType.CLTypeEnum.PublicKey, bytes = accountHex, parsed = fromAccount }));
-            argsTransfer.Add(new DeployNamedArg("id", new CLValue() { cl_type = CLType.CLTypeEnum.U64, bytes = idBytes, parsed = id.ToString() }));
+            argsTransfer.Add(new DeployNamedArg("target", new CLValue() { cl_type = CLType.CLTypeEnum.BYTE_ARRAY, bytes = hashSvc.GetAccountHash(toAccount), parsed = toAccount }));
+            argsTransfer.Add(new DeployNamedArg("id", new CLValue() { cl_type = CLType.CLTypeEnum.OPTION, bytes = idBytes, parsed = id.ToString() }));
 
             return new DeployTransfer(argsTransfer);
         }

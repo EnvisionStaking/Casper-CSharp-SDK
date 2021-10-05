@@ -11,37 +11,37 @@ namespace EnvisionStaking.Casper.SDK.Services
     public class HashService
     {
 
-        public string GetAccountHash(  string accountKey)
-        {           
-            var valueKeyAlgorithm = ByteUtil.CombineBytes(Encoding.UTF8.GetBytes(GetAlgorithm(accountKey).ToLower()), new byte[1]);            
+        public string GetAccountHash(string accountKey)
+        {
+            var valueKeyAlgorithm = ByteUtil.CombineBytes(Encoding.UTF8.GetBytes(GetAlgorithm(accountKey).ToLower()), new byte[1]);
 
             var valueKey = ByteUtil.CombineBytes(valueKeyAlgorithm, StringToByteArray(accountKey.Substring(2)));
 
-            var resultHex = GetHashToHex(valueKey);
+            var resultHex = GetHashToHexFixedSize(valueKey, 32);
 
             return resultHex;
         }
 
-        public string GetHashToHex(byte[] bytes)
+        public string GetHashToHexFixedSize(byte[] bytes, int hashSize)
         {
-            var resultByte = GetHashToBinary(bytes);
+            var resultByte = GetHashToBinaryFixedSize(bytes, hashSize);
 
             var resultHex = BitConverter.ToString(resultByte).Replace("-", "").ToLower();
 
             return resultHex;
         }
 
-        public byte[] GetHashToBinary(byte[] bytes)
+        public byte[] GetHashToBinaryFixedSize(byte[] bytes, int hashSize)
         {
-            var hashAlgorithm = new HMACBlake2B(256);
+            var hashAlgorithm = new HMACBlake2B(hashSize*8);
             hashAlgorithm.Initialize();
 
             var resultBytes = hashAlgorithm.ComputeHash(bytes);
 
             return resultBytes;
-        }             
+        }      
 
-        private string GetAlgorithm(string key)
+        public string GetAlgorithm(string key)
         {
             string keyStartingWith = key.Substring(0, 2);
             string algoResult = string.Empty;
@@ -68,6 +68,8 @@ namespace EnvisionStaking.Casper.SDK.Services
                         }
                         algoResult = "SECP256K1";
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException(String.Format("Unknown key prefix: [%s]", key.Substring(0, 2)));
                 }
 
             }
@@ -77,6 +79,62 @@ namespace EnvisionStaking.Casper.SDK.Services
             }
 
             return algoResult;
+        }
+
+        public byte[] GetAlgorithmBytes(string key)
+        {
+            string keyStartingWith = key.Substring(0, 2);
+            string algoResult = string.Empty;
+
+            if (key == null || key.Length < 66)
+            {
+                throw new ArgumentOutOfRangeException("Key size must be equal or greater than 66 chars");
+            }
+            try
+            {
+                switch (keyStartingWith)
+                {
+                    case "01":
+                        return new byte[] { 1 };
+                    case "02":
+                       return new byte[] { 2 };
+                    default:
+                        throw new ArgumentOutOfRangeException(String.Format("Unknown key prefix: [%s]", key.Substring(0, 2)));
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentOutOfRangeException(String.Format("Unknown key prefix: [%s]", key.Substring(0, 2)));
+            }
+        }
+
+        public string GetAlgorithmHex(string key)
+        {
+            string keyStartingWith = key.Substring(0, 2);
+            string algoResult = string.Empty;
+
+            if (key == null || key.Length < 66)
+            {
+                throw new ArgumentOutOfRangeException("Key size must be equal or greater than 66 chars");
+            }
+            try
+            {
+                switch (keyStartingWith)
+                {
+                    case "01":
+                        return keyStartingWith;
+                    case "02":
+                        return keyStartingWith;
+                    default:
+                        throw new ArgumentOutOfRangeException(String.Format("Unknown key prefix: [%s]", key.Substring(0, 2)));
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentOutOfRangeException(String.Format("Unknown key prefix: [%s]", key.Substring(0, 2)));
+            }
         }
 
         private byte[] StringToByteArray(string hex)

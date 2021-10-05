@@ -15,21 +15,20 @@ namespace EnvisionStaking.Casper.SDK.Model.DeployObject
     {       
         public string hash { get; set; }
         public PutDeployHeader header { get; set; }
-        public List<Approval> approvals { get; set; }
         public PutDeployPayment payment { get; set; }
         public PutDeploySession session { get; set; }
+        public List<Approval> approvals { get; set; }
     }
     [Serializable]
     public class PutDeployHeader
     {
         public string account { get; set; }
-        public string body_hash { get; set; }
-        public string chain_name { get; set; }
-        public long gas_price { get; set; }
         public DateTime timestamp { get; set; }
         public string ttl { get; set; }
+        public long gas_price { get; set; }
+        public string body_hash { get; set; }
         public List<string> dependencies { get; set; }
-
+        public string chain_name { get; set; }
     }
     [Serializable]
     public class PutDeployPayment

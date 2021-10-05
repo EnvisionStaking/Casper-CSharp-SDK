@@ -10,9 +10,9 @@ namespace EnvisionStaking.Casper.SDK.Test
     public class DeployServiceTest
     {
         string rpcUrl = "https://node-clarity-mainnet.make.services/rpc";
-        string metricsUrl = "http://40.69.22.98:8888/metrics";
-        string accountKey = "0202ba37a693fb6494b3c42a65f07a6123dd125d8bf8a16e10ec7b95b826b151230c";
-
+        string fromAccountKey = "01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07";
+        string toAccountKey = "01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07";
+        //string toAccountKey = "020228782ebc6dc9fc2fd67f08bce741bdd4892ff0c616811bc0cfeff5daf5476bd1";
         [TestMethod]
         public void GetDeploy()
         {
@@ -24,20 +24,20 @@ namespace EnvisionStaking.Casper.SDK.Test
             Assert.IsNotNull(result.result.deploy);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void PutDeploy()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.PutDeploy(50, "01ddf755862dcde8de3e7ff13d9c42481d39e422cc461518bb12b8fb0c9366c79c", 1);
+            var makeDeployResult = casperClient.DeployService.PutDeploy(25, fromAccountKey, toAccountKey, 1, @"keys\public_key.pem", @"keys\secret_key.pem");
 
             Assert.IsNotNull(makeDeployResult);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void MakeDeploy()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeploy(50, "01ddf755862dcde8de3e7ff13d9c42481d39e422cc461518bb12b8fb0c9366c79c", 1);
+            var makeDeployResult = casperClient.DeployService.MakeDeploy(25, fromAccountKey, toAccountKey, 1, @"keys\public_key.pem", @"keys\secret_key.pem");
 
             Assert.IsNotNull(makeDeployResult);
         }
@@ -46,7 +46,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void MakeDeployToJson()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeployToJson(50, "01ddf755862dcde8de3e7ff13d9c42481d39e422cc461518bb12b8fb0c9366c79c", 1);
+            var makeDeployResult = casperClient.DeployService.MakeDeployToJson(25, fromAccountKey, toAccountKey, 1, @"keys\public_key.pem", @"keys\secret_key.pem");
 
             Assert.IsNotNull(makeDeployResult);
         }
