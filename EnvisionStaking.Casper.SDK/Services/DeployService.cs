@@ -43,7 +43,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             putDeployRequest.Parameters.deploy = new PutDeployDeploy();
 
             //Set Payment
-            putDeployRequest.Parameters.deploy.payment = NewPayment();
+            putDeployRequest.Parameters.deploy.payment = NewPayment(10000);
 
             //Set Transfer
             putDeployRequest.Parameters.deploy.session = new PutDeploySession();
@@ -52,9 +52,9 @@ namespace EnvisionStaking.Casper.SDK.Services
             //Set Header
             putDeployRequest.Parameters.deploy.header = new PutDeployHeader();
             putDeployRequest.Parameters.deploy.header.account = fromAccount;
-            putDeployRequest.Parameters.deploy.header.timestamp = DateTime.Parse("2021-10-04T09:59:27.534000Z");
+            putDeployRequest.Parameters.deploy.header.timestamp = DateTime.Now;
             putDeployRequest.Parameters.deploy.header.ttl = "30m";
-            putDeployRequest.Parameters.deploy.header.gas_price = 10;
+            putDeployRequest.Parameters.deploy.header.gas_price = 1;
             putDeployRequest.Parameters.deploy.header.body_hash = GetBodyHash(putDeployRequest.Parameters.deploy.payment, putDeployRequest.Parameters.deploy.session.Transfer);
             putDeployRequest.Parameters.deploy.header.dependencies = new List<string>();
             putDeployRequest.Parameters.deploy.header.chain_name = "casper";
@@ -133,9 +133,9 @@ namespace EnvisionStaking.Casper.SDK.Services
             return hashSvc.GetHashToHexFixedSize(combined, 32);
         }
 
-        private PutDeployPayment NewPayment()
+        private PutDeployPayment NewPayment(decimal paymentAmount)
         {
-            decimal standardPayment = 10000000000;
+            decimal standardPayment = paymentAmount;
             string standardPaymentByte = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512SerializerWithLength(standardPayment));
 
             var argsPayment = new List<DeployNamedArg>();

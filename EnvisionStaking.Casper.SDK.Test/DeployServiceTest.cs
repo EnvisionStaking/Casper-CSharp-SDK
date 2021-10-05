@@ -10,10 +10,10 @@ namespace EnvisionStaking.Casper.SDK.Test
     public class DeployServiceTest
     {
         string rpcUrl = "https://node-clarity-mainnet.make.services/rpc";
-        string fromAccountKey = "01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07";
-        string toAccountKey = "01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07";
+        string fromAccountKey = "01da19d95aae08da9df0c3a7ba8fbb368af4fb99e7f522b6471963473295955031";
+        string toAccountKey = "01c4328cde0ce19e18e8bf61cb0f62af889b928a1b958ce69c401e21b07fb7acd6";
         //string toAccountKey = "020228782ebc6dc9fc2fd67f08bce741bdd4892ff0c616811bc0cfeff5daf5476bd1";
-        [TestMethod]
+        //[TestMethod]
         public void GetDeploy()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
@@ -46,7 +46,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void MakeDeployToJson()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeployToJson(25, fromAccountKey, toAccountKey, 1, @"keys\public_key.pem", @"keys\secret_key.pem");
+            var makeDeployResult = casperClient.DeployService.MakeDeployToJson(2.5, fromAccountKey, toAccountKey, 1, @"C:\tmp\Keys\Phanis10_public_key.pem", @"C:\tmp\Keys\Phanis10_secret_key.pem");
 
             Assert.IsNotNull(makeDeployResult);
         }
