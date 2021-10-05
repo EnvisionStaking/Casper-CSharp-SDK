@@ -1,4 +1,4 @@
-# Development Status ~ 85% completion
+# Development Status ~ 90% completion
 
 ## Completed Tasks - Unit Tests Completed - Regression Test pending
 ### RPC Service Synchronous Operations
@@ -22,6 +22,9 @@
 * RPC Service -> GetShema
 * RPC Service -> GetStateItem
 * RPC Service -> GetNodePeers
+### RPC Service Deploy Operations
+* RPC Service -> PutDeploy -> Transfer
+* Serializers
 ### RPC Service Asynchronous Operations
 * RPC Service - Async -> GetNextBlockAsync
 * RPC Service - Async -> AwaitNBlockAsync
@@ -57,9 +60,7 @@
 * RPC Service -> GetEraInfoByHeight
 
 
-
 ## Work In Progress
-
 * Signing Service - secp256k1  -> GetKeyPairFromFile
 * Signing Service - secp256k1   -> GetKeyPair
 * Signing Service - secp256k1   -> GenerateKeyPair
@@ -67,9 +68,8 @@
 * Signing Service - secp256k1   -> VerifySignature
 * Signing Service - secp256k1  -> ConvertPrivateKeyToPemAndSaveToDisk
 * Signing Service - secp256k1  -> ConvertPublicKeyToPemAndSaveToDisk
-* RPC Service -> PutDeploy
-* Serializers
-
+* RPC Service -> PutDeploy -> Delegate
+* RPC Service -> PutDeploy -> Undelegate
 
 
 ## Not Started Tasks
