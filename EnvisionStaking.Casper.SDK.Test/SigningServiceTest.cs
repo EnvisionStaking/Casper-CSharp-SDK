@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using EnvisionStaking.Casper.SDK.Enums;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,11 +18,11 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void VerifySignatureByGeneratedKeyPair()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var keyPair = casperClient.SigningService.GenerateKeyPair();
+            var keyPair = casperClient.SigningService.GenerateKeyPair(SignAlgorithmEnum.ed25519);
 
             var messageToSign = Encoding.UTF8.GetBytes("Test Message");
 
-            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, messageToSign);
+            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, messageToSign, SignAlgorithmEnum.ed25519);
 
             var signatureIsVerified = casperClient.SigningService.VerifySignature(keyPair.Public, messageToSign, signedMessage);
 
@@ -32,12 +33,12 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void VerifySignatureByGeneratedKeyPairChangeMessage()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var keyPair = casperClient.SigningService.GenerateKeyPair();
+            var keyPair = casperClient.SigningService.GenerateKeyPair(SignAlgorithmEnum.ed25519);
 
             var messageToSign = Encoding.UTF8.GetBytes("Test Message");
             var messageToSignChanged = Encoding.UTF8.GetBytes("Test Message Changed");
 
-            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, messageToSign);
+            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, messageToSign, SignAlgorithmEnum.ed25519);
 
             var signatureIsVerified = casperClient.SigningService.VerifySignature(keyPair.Public, messageToSignChanged, signedMessage);
 
@@ -52,7 +53,7 @@ namespace EnvisionStaking.Casper.SDK.Test
 
             var messageToSign = Encoding.UTF8.GetBytes("Test Message");
 
-            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, messageToSign);
+            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, messageToSign, SignAlgorithmEnum.ed25519);
 
             var signatureIsVerified = casperClient.SigningService.VerifySignature(keyPair.Public, messageToSign, signedMessage);
 
@@ -68,7 +69,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             var messageToSign = Encoding.UTF8.GetBytes("Test Message");
             var messageToSignChanged = Encoding.UTF8.GetBytes("Test Message Changed");
 
-            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, messageToSign);
+            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, messageToSign, SignAlgorithmEnum.ed25519);
 
             var signatureIsVerified = casperClient.SigningService.VerifySignature(keyPair.Public, messageToSignChanged, signedMessage);
 
@@ -89,7 +90,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             CasperClient casperClient = new CasperClient(rpcUrl);
             var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\public_key.pem", @"keys\secret_key.pem");
 
-            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, message);           
+            var signedMessage = casperClient.SigningService.GetSignature(keyPair.Private, message, SignAlgorithmEnum.ed25519);           
 
             bool signatureIsVerified = casperClient.SigningService.VerifySignature(keyPair.Public, message, signedMessage);
 

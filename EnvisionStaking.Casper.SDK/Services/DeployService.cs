@@ -1,4 +1,5 @@
-﻿using EnvisionStaking.Casper.SDK.Model.Common;
+﻿using EnvisionStaking.Casper.SDK.Enums;
+using EnvisionStaking.Casper.SDK.Model.Common;
 using EnvisionStaking.Casper.SDK.Model.DeployObject;
 using EnvisionStaking.Casper.SDK.Serialization;
 using EnvisionStaking.Casper.SDK.Utils;
@@ -79,7 +80,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             byte[] algorithm = hashSvc.GetAlgorithmBytes(fromAccount);
 
             //Sign hash value
-            byte[] signature = signingSvc.GetSignature(keys.Private, hashValueByte);
+            byte[] signature = signingSvc.GetSignature(keys.Private, hashValueByte, SignAlgorithmEnum.ed25519);
 
             //The fist byte within the signature is 1 in the case of an Ed25519 signature or 2 in the case of Secp256k1.
             byte[] bytes = ByteUtil.CombineBytes(algorithm, signature);

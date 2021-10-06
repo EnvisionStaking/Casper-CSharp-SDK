@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using EnvisionStaking.Casper.SDK.Enums;
 using EnvisionStaking.Casper.SDK.Utils;
 using Konscious.Security.Cryptography;
 
@@ -13,7 +14,7 @@ namespace EnvisionStaking.Casper.SDK.Services
 
         public string GetAccountHash(string accountKey)
         {
-            var valueKeyAlgorithm = ByteUtil.CombineBytes(Encoding.UTF8.GetBytes(GetAlgorithm(accountKey).ToLower()), new byte[1]);
+            var valueKeyAlgorithm = ByteUtil.CombineBytes(Encoding.UTF8.GetBytes(GetAlgorithm(accountKey).ToString().ToLower()), new byte[1]);
 
             var valueKey = ByteUtil.CombineBytes(valueKeyAlgorithm, StringToByteArray(accountKey.Substring(2)));
 
@@ -41,10 +42,9 @@ namespace EnvisionStaking.Casper.SDK.Services
             return resultBytes;
         }      
 
-        public string GetAlgorithm(string key)
+        public SignAlgorithmEnum GetAlgorithm(string key)
         {
             string keyStartingWith = key.Substring(0, 2);
-            string algoResult = string.Empty;
 
             if (key == null || key.Length < 66)
             {
@@ -59,14 +59,14 @@ namespace EnvisionStaking.Casper.SDK.Services
                         {
                             throw new ArgumentOutOfRangeException("Key length must be 66 chars");
                         }
-                        algoResult = "ED25519";
+                        return SignAlgorithmEnum.ed25519;
                         break;
                     case "02":
                         if (key.Length != 68)
                         {
                             throw new ArgumentOutOfRangeException("Key length must be 68 chars");
                         }
-                        algoResult = "SECP256K1";
+                        return SignAlgorithmEnum.secp256k1;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(String.Format("Unknown key prefix: [%s]", key.Substring(0, 2)));
@@ -77,8 +77,6 @@ namespace EnvisionStaking.Casper.SDK.Services
             {
                 throw new ArgumentOutOfRangeException(String.Format("Unknown key prefix: [%s]", key.Substring(0, 2)));
             }
-
-            return algoResult;
         }
 
         public byte[] GetAlgorithmBytes(string key)
