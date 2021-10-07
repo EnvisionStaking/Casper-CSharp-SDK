@@ -6,21 +6,20 @@ using System.Text;
 
 namespace EnvisionStaking.Casper.SDK.Model.DeployObject
 {
-    public class PutDeployRequest : Base.Request
+    public class PutDeployDelegateRequest : Base.Request
     {
-        public PutDeployRequest()
+        public PutDeployDelegateRequest()
         {
             this.method = "account_put_deploy";
-            this.Parameters = new PutDeployParameters();
+            this.Parameters = new PutDeployDelegateParameters();
         }
 
-        public PutDeployRequest(Deploy deployParam)
+        public PutDeployDelegateRequest(Deploy deployParam)
         {
             this.method = "account_put_deploy";
-            //this.Parameters = new PutDeployParameters() { deploy = deployParam };
         }
 
         [JsonProperty("params")]
-        public PutDeployParameters Parameters { get; set; }
+        public PutDeployDelegateParameters Parameters { get; set; }
     }
 }

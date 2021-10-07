@@ -253,10 +253,10 @@ namespace EnvisionStaking.Casper.SDK.Services
             return RpcClient<DeployRequest, DeployResult>(RpCUrl, request, HttpMethod.Post);
         }
 
-        public PutDeployResult PutDeploy(PutDeployRequest request)
+        public PutDeployResult PutDeploy(PutDeployTransferRequest request)
         {
 
-            return RpcClient<PutDeployRequest, PutDeployResult>(RpCUrl, request, HttpMethod.Post);
+            return RpcClient<PutDeployTransferRequest, PutDeployResult>(RpCUrl, request, HttpMethod.Post);
         }
         #endregion
 

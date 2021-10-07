@@ -17,13 +17,7 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
 
         public byte[] ToBytes()
         {
-            return ByteUtil.HexToByteArray(bytes);           
-
-            //return ByteUtil.concat(
-            //        getU32Serializer().serialize(source.getBytes().length),
-            //        source.getBytes(),
-            //        toBytesForCLTypeInfo(source.getCLTypeInfo())
-            //);
+            return ByteUtil.HexToByteArray(bytes);
         }
     }
 }

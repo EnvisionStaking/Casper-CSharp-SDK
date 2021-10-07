@@ -42,7 +42,7 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
             bytes = ByteUtil.CombineBytes(bytes, name);
 
             //Get Arg Length and add to array
-            bytes = ByteUtil.CombineBytes(bytes,Serialization.TypesSerializer.Getu32Serializer(this.GetValue().ToBytes().Length));
+            bytes = ByteUtil.CombineBytes(bytes,TypesSerializer.Getu32Serializer(this.GetValue().ToBytes().Length));
 
             //Get Arg value and add to array
             bytes = ByteUtil.CombineBytes(bytes, this.GetValue().ToBytes());
