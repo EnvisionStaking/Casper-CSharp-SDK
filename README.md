@@ -23,7 +23,7 @@
 * RPC Service -> GetStateItem
 * RPC Service -> GetNodePeers
 ### RPC Service Deploy Operations
-* RPC Service -> PutDeploy -> Transfer
+* RPC Service -> PutDeploy - Ed25519 -> Transfer
 * Serializers
 ### RPC Service Asynchronous Operations
 * RPC Service - Async -> GetNextBlockAsync
@@ -52,7 +52,13 @@
 * Signing Service - Ed25519  -> VerifySignature
 * Signing Service - Ed25519  -> ConvertPrivateKeyToPemAndSaveToDisk
 * Signing Service - Ed25519  -> ConvertPublicKeyToPemAndSaveToDisk
-
+* Signing Service - secp256k1  -> GetKeyPairFromFile
+* Signing Service - secp256k1   -> GetKeyPair
+* Signing Service - secp256k1   -> GenerateKeyPair
+* Signing Service - secp256k1   -> GetSignature
+* Signing Service - secp256k1   -> VerifySignature
+* Signing Service - secp256k1  -> ConvertPrivateKeyToPemAndSaveToDisk
+* Signing Service - secp256k1  -> ConvertPublicKeyToPemAndSaveToDisk
 
 ## Completed Tasks - Not able to Unit Test - Regression Test pending
 * RPC Service -> GetEraInfoLast
@@ -61,13 +67,7 @@
 
 
 ## Work In Progress
-* Signing Service - secp256k1  -> GetKeyPairFromFile
-* Signing Service - secp256k1   -> GetKeyPair
-* Signing Service - secp256k1   -> GenerateKeyPair
-* Signing Service - secp256k1   -> GetSignature
-* Signing Service - secp256k1   -> VerifySignature
-* Signing Service - secp256k1  -> ConvertPrivateKeyToPemAndSaveToDisk
-* Signing Service - secp256k1  -> ConvertPublicKeyToPemAndSaveToDisk
+* RPC Service -> PutDeploy - secp256k1 -> Transfer
 * RPC Service -> PutDeploy -> Delegate
 * RPC Service -> PutDeploy -> Undelegate
 

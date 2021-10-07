@@ -1,3 +1,4 @@
+using EnvisionStaking.Casper.SDK.Enums;
 using EnvisionStaking.Casper.SDK.Model.Common;
 using EnvisionStaking.Casper.SDK.Model.DeployObject;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,10 +26,19 @@ namespace EnvisionStaking.Casper.SDK.Test
         }
 
         //[TestMethod]
-        public void PutDeploy()
+        public void PutDeploy1()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.PutDeploy(25, fromAccountKey, toAccountKey, 1, @"keys\public_key.pem", @"keys\secret_key.pem");
+            var makeDeployResult = casperClient.DeployService.PutDeployTransfer(25, fromAccountKey, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
+
+            Assert.IsNotNull(makeDeployResult);
+        }
+
+        public void PutDeploy2()
+        {
+            fromAccountKey = "0203a9cd2472eeedb7081dd87ecae04d8fe1cedbf5e6a9fcb158ad966d94c63d2c6d";
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var makeDeployResult = casperClient.DeployService.PutDeployTransfer(25, fromAccountKey, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
 
             Assert.IsNotNull(makeDeployResult);
         }
@@ -37,16 +47,27 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void MakeDeploy()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeploy(25, fromAccountKey, toAccountKey, 1, @"keys\public_key.pem", @"keys\secret_key.pem");
+            var makeDeployResult = casperClient.DeployService.MakeDeployTransfer(25, fromAccountKey, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             Assert.IsNotNull(makeDeployResult);
         }
 
         [TestMethod]
-        public void MakeDeployToJson()
+        public void MakeDeployToJson1()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeployToJson(2.5, fromAccountKey, toAccountKey, 1, @"C:\tmp\Keys\Phanis10_public_key.pem", @"C:\tmp\Keys\Phanis10_secret_key.pem");
+            var makeDeployResult = casperClient.DeployService.MakeDeployToJson(25, fromAccountKey, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
+
+            Assert.IsNotNull(makeDeployResult);
+        }
+
+        [TestMethod]
+        public void MakeDeployToJson2()
+        {
+            fromAccountKey = "0203a9cd2472eeedb7081dd87ecae04d8fe1cedbf5e6a9fcb158ad966d94c63d2c6d";
+
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var makeDeployResult = casperClient.DeployService.MakeDeployToJson(25, fromAccountKey, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
 
             Assert.IsNotNull(makeDeployResult);
         }

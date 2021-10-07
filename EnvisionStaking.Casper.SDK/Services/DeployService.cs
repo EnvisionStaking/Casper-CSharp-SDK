@@ -27,14 +27,14 @@ namespace EnvisionStaking.Casper.SDK.Services
             return rpcSvc.GetDeploy(deployHash);
         }
 
-
-        public PutDeployResult PutDeploy(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation)
+        #region Deploy Transfer
+        public PutDeployResult PutDeployTransfer(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
         {
-            PutDeployRequest request = MakeDeploy(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation);
+            PutDeployRequest request = MakeDeployTransfer(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm);
             return rpcSvc.PutDeploy(request);
         }
 
-        public PutDeployRequest MakeDeploy(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation)
+        public PutDeployRequest MakeDeployTransfer(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
         {
             var normAmount = (ulong)(amount * 1000000000);
             PutDeployRequest putDeployRequest = new PutDeployRequest();
@@ -67,46 +67,45 @@ namespace EnvisionStaking.Casper.SDK.Services
             putDeployRequest.Parameters.deploy.hash = hashedHeader;
 
             //Set Approval
-            var keys = signingSvc.GetKeyPairFromFile(publicKeyLocation, privateKeyLocation);
+            var keys = signingSvc.GetKeyPairFromFile(publicKeyLocation, privateKeyLocation, signAlgorithm);
             putDeployRequest.Parameters.deploy.approvals = new List<Approval>();
             putDeployRequest.Parameters.deploy.approvals.Add(CreateAndSignApproval(fromAccount, putDeployRequest.Parameters.deploy.hash, keys));
             
             return putDeployRequest;
         }
-
+            
+        public string MakeDeployTransferToJson(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
+        {
+            return JsonConvert.SerializeObject(MakeDeployTransfer(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm), JsonUtil.JsonSerializerSettings());
+        }
+        #endregion
         private Approval CreateAndSignApproval(string fromAccount, string deployHash, Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keys)
         {
             byte[] hashValueByte = ByteUtil.HexToByteArray(deployHash);
-            byte[] algorithm = hashSvc.GetAlgorithmBytes(fromAccount);
+            byte[] algorithmBytes = hashSvc.GetAlgorithmBytes(fromAccount);
+            var algorithm = hashSvc.GetAlgorithm(fromAccount);
 
             //Sign hash value
-            byte[] signature = signingSvc.GetSignature(keys.Private, hashValueByte, SignAlgorithmEnum.ed25519);
+            byte[] signature = null;
+            if (algorithm == SignAlgorithmEnum.ed25519)
+            {
+                signature = signingSvc.GetSignatureEd25519(keys.Private, hashValueByte);
+            }
+            else if (algorithm == SignAlgorithmEnum.secp256k1)
+            {
+                signature = signingSvc.GetSignatureSecp256k1(keys.Private, hashValueByte);
+            }
+
 
             //The fist byte within the signature is 1 in the case of an Ed25519 signature or 2 in the case of Secp256k1.
-            byte[] bytes = ByteUtil.CombineBytes(algorithm, signature);
-          
+            byte[] bytes = ByteUtil.CombineBytes(algorithmBytes, signature);
+
             var approval = new Approval();
             approval.signature = ByteUtil.ByteArrayToHex(bytes);
             approval.signer = fromAccount;
 
             return approval;
         }
-
-        public string MakeDeployToJson(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation)
-        {
-            return JsonConvert.SerializeObject(MakeDeploy(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation), JsonUtil.JsonSerializerSettings());
-        }
-
-        public void SignDeploy()
-        {
-
-        }
-
-        public void DispatchDeploy()
-        {
-
-        }
-
         private byte[] GetSerializedHeader(PutDeployHeader header)
         {
             byte[] bytes;

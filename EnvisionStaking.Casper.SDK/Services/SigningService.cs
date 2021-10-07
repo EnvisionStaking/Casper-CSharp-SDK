@@ -1,38 +1,50 @@
 ﻿using EnvisionStaking.Casper.SDK.Enums;
 using EnvisionStaking.Casper.SDK.Utils;
+using Nethereum.Signer;
+using Nethereum.Signer.Crypto;
+using Org.BouncyCastle.Asn1;
+using Org.BouncyCastle.Asn1.Sec;
 using Org.BouncyCastle.Asn1.X9;
-using Org.BouncyCastle.Cms;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Signers;
-using Org.BouncyCastle.OpenSsl;
+using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Utilities.Encoders;
 using Org.BouncyCastle.Utilities.IO.Pem;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace EnvisionStaking.Casper.SDK.Services
 {
     public class SigningService
     {
-        public AsymmetricCipherKeyPair GetKeyPairFromFile(string publicKeyFilePath, string privateKeyFilePath)
+        public AsymmetricCipherKeyPair GetKeyPairFromFile(string publicKeyFilePath, string privateKeyFilePath, SignAlgorithmEnum signAlgorithm)
         {
-            return GetKeyPair(File.OpenRead(publicKeyFilePath), File.OpenRead(privateKeyFilePath));
+            return GetKeyPair(File.OpenRead(publicKeyFilePath), File.OpenRead(privateKeyFilePath), signAlgorithm);
         }
 
-        public AsymmetricCipherKeyPair GetKeyPair(Stream publicKeyIn, Stream privateKeyIn)
+
+
+        public AsymmetricCipherKeyPair GetKeyPair(Stream publicKeyIn, Stream privateKeyIn, SignAlgorithmEnum signAlgorithm)
         {
-            byte[] publicBytes = ReadPem(publicKeyIn);
-            byte[] secretBytes = ReadPem(privateKeyIn);
+            if (signAlgorithm == SignAlgorithmEnum.ed25519)
+            {
+                byte[] publicBytes = ReadPemToByte(publicKeyIn);
+                byte[] secretBytes = ReadPemToByte(privateKeyIn);
 
-            byte[] publicLastBytes = ByteUtil.GetLastNBytes(publicBytes, 32);
-            byte[] secretLastBytes = ByteUtil.GetLastNBytes(secretBytes, 32);
+                byte[] publicLastBytes = ByteUtil.GetLastNBytes(publicBytes, 32);
+                byte[] secretLastBytes = ByteUtil.GetLastNBytes(secretBytes, 32);
 
-
-            return new AsymmetricCipherKeyPair(new Ed25519PublicKeyParameters(publicLastBytes, 0), new Ed25519PrivateKeyParameters(secretLastBytes, 0));
+                return new AsymmetricCipherKeyPair(new Ed25519PublicKeyParameters(publicLastBytes, 0), new Ed25519PrivateKeyParameters(secretLastBytes, 0));
+            }
+            else
+            {
+                var secretPem = ReadPemToObject(privateKeyIn);
+                return (AsymmetricCipherKeyPair)secretPem;
+            }
         }
 
         public AsymmetricCipherKeyPair GenerateKeyPair(SignAlgorithmEnum signAlgorithm)
@@ -44,7 +56,7 @@ namespace EnvisionStaking.Casper.SDK.Services
                 keyPairGenerator.Init(new Ed25519KeyGenerationParameters(random));
                 return keyPairGenerator.GenerateKeyPair();
             }
-            else if(signAlgorithm == SignAlgorithmEnum.secp256k1)
+            else if (signAlgorithm == SignAlgorithmEnum.secp256k1)
             {
                 var curve = ECNamedCurveTable.GetByName(SignAlgorithmEnum.secp256k1.ToString());
                 var domainParams = new ECDomainParameters(curve.Curve, curve.G, curve.N, curve.H, curve.GetSeed());
@@ -62,9 +74,9 @@ namespace EnvisionStaking.Casper.SDK.Services
             {
                 throw new NotSupportedException("Sign Algorithm not supported");
             }
-        }  
+        }
 
-        private Ed25519Signer GenerateKeyPair(byte[] privateKeyBytes)
+        private Ed25519Signer GenerateKeyPairEd25519(byte[] privateKeyBytes)
         {
             Ed25519PrivateKeyParameters privateKeyParameters = new Ed25519PrivateKeyParameters(privateKeyBytes, 0);
             Ed25519Signer ed25519Signer = new Ed25519Signer();
@@ -72,29 +84,14 @@ namespace EnvisionStaking.Casper.SDK.Services
             return ed25519Signer;
         }
 
-        public byte[] GetSignature(AsymmetricKeyParameter privateKey, byte[] toSign, SignAlgorithmEnum signAlgorithm)
+        public byte[] GetSignatureEd25519(AsymmetricKeyParameter privateKey, byte[] toSign)
         {
-            if (signAlgorithm == SignAlgorithmEnum.ed25519)
-            {
-                Ed25519Signer signer = new Ed25519Signer();
-                signer.Init(true, privateKey);
-                signer.BlockUpdate(toSign, 0, toSign.Length);
-                return signer.GenerateSignature();
-            }
-            else if (signAlgorithm == SignAlgorithmEnum.secp256k1)
-            {
-                var signer = new ECDsaSigner();
-                signer.Init(true, privateKey);
-                var signature = signer.GenerateSignature(toSign);
-                return ByteUtil.CombineBytes(signature[0].ToByteArray(), signature[1].ToByteArray());
-            }
-            else
-            {
-                throw new NotSupportedException("Sign Algorithm not supported");
-            }
+            Ed25519Signer signer = new Ed25519Signer();
+            signer.Init(true, privateKey);
+            signer.BlockUpdate(toSign, 0, toSign.Length);
+            return signer.GenerateSignature();
         }
-
-        public bool VerifySignature(AsymmetricKeyParameter publicKeyParameters, byte[] message, byte[] signed)
+        public bool VerifySignatureEd25519(AsymmetricKeyParameter publicKeyParameters, byte[] message, byte[] signed)
         {
             Ed25519Signer verifier = new Ed25519Signer();
             verifier.Init(false, publicKeyParameters);
@@ -102,12 +99,43 @@ namespace EnvisionStaking.Casper.SDK.Services
             return verifier.VerifySignature(signed);
         }
 
-        private byte[] ReadPem(Stream keyStream)
+        public byte[] GetSignatureSecp256k1(AsymmetricKeyParameter privateKey, byte[] toSign)
+        {
+            var signer = new ECDsaSigner();
+            signer.Init(true, privateKey);
+            var signature = signer.GenerateSignature(toSign);
+            return ByteUtil.CombineBytes(signature[0].ToByteArrayUnsigned(), signature[1].ToByteArrayUnsigned());
+        }
+        
+        public bool VerifySignatureSecp256k1(AsymmetricKeyParameter publicKeyParameters, byte[] message, BigInteger[] signed)
+        {
+            var signer = new ECDsaSigner();
+            signer.Init(false, publicKeyParameters);
+            return signer.VerifySignature(message, signed[0], signed[1]);
+        }
+             
+        private byte[] ReadPemToByte(Stream keyStream)
         {
             TextReader textReader = new StreamReader(keyStream);
             var pemReader = new Org.BouncyCastle.OpenSsl.PemReader(textReader);
             var pemObject = pemReader.ReadPemObject();
             return pemObject.Content;
+        }
+
+        private object ReadPemToObject(Stream keyStream)
+        {
+            TextReader textReader = new StreamReader(keyStream);
+            var pemReader = new Org.BouncyCastle.OpenSsl.PemReader(textReader);
+            var pemObject = pemReader.ReadObject();
+            return pemObject;
+        }
+
+        private PemObject ReadPemToPemObject(Stream keyStream)
+        {
+            TextReader textReader = new StreamReader(keyStream);
+            var pemReader = new Org.BouncyCastle.OpenSsl.PemReader(textReader);
+            var pemObject = pemReader.ReadPemObject();
+            return pemObject;
         }
 
         public string ConvertPrivateKeyToPem(AsymmetricKeyParameter privateKey)
@@ -119,7 +147,7 @@ namespace EnvisionStaking.Casper.SDK.Services
                 pemWriter.Writer.Flush();
                 return stringWriter.ToString();
             }
-        }       
+        }
 
         public string ConvertPublicKeyToPem(AsymmetricKeyParameter publicKey)
         {

@@ -7,14 +7,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Keys\Ed25519_Test_public_key.pem" />
+    <None Remove="Keys\Ed25519_Test_public_key_hex.txt" />
+    <None Remove="Keys\Ed25519_Test_secret_key.pem" />
     <None Remove="Keys\private.pem" />
     <None Remove="Keys\public.pem" />
     <None Remove="Keys\public_key.pem" />
     <None Remove="Keys\public_key_hex" />
+    <None Remove="Keys\Secp256k1_Test_public_key.pem" />
+    <None Remove="Keys\Secp256k1_Test_public_key_hex.txt" />
+    <None Remove="Keys\Secp256k1_Test_secret_key.pem" />
     <None Remove="Keys\secret_key.pem" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Keys\Ed25519_Test_public_key.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keys\Ed25519_Test_public_key_hex.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keys\Ed25519_Test_secret_key.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Keys\private.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -28,6 +43,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Keys\public_key_hex">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keys\Secp256k1_Test_public_key.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keys\Secp256k1_Test_public_key_hex.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keys\Secp256k1_Test_secret_key.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Keys\secret_key.pem">
