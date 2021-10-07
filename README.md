@@ -1,4 +1,4 @@
-# Development Status ~ 92% completion
+# Development Status ~ 93% completion
 
 ## Completed Tasks - Unit Tests Completed - Regression Test pending
 ### RPC Service Synchronous Operations
@@ -25,6 +25,7 @@
 ### RPC Service Deploy Operations
 * RPC Service -> PutDeploy - Ed25519 -> Transfer
 * RPC Service -> PutDeploy - Ed25519 -> Delegate
+* RPC Service -> PutDeploy - Ed25519 -> Undelegate
 * Serializers
 ### RPC Service Asynchronous Operations
 * RPC Service - Async -> GetNextBlockAsync
@@ -71,7 +72,6 @@
 ## Work In Progress
 * RPC Service -> PutDeploy - secp256k1 -> Transfer
 * RPC Service -> PutDeploy - secp256k1 -> Delegate
-* RPC Service -> PutDeploy - Ed25519 -> Undelegate
 * RPC Service -> PutDeploy - secp256k1 -> Undelegate
 
 

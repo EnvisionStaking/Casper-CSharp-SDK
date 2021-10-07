@@ -29,7 +29,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void PutDeployTransferEd25519()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.PutDeployTransfer(25, fromAccountKey, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
+            var makeDeployResult = casperClient.DeployService.Transfer(25, fromAccountKey, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             Assert.IsNotNull(makeDeployResult);
         }
@@ -38,7 +38,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         {
             fromAccountKey = "0203a9cd2472eeedb7081dd87ecae04d8fe1cedbf5e6a9fcb158ad966d94c63d2c6d";
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.PutDeployTransfer(25, fromAccountKey, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+            var makeDeployResult = casperClient.DeployService.Transfer(25, fromAccountKey, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
 
             Assert.IsNotNull(makeDeployResult);
         }
@@ -56,42 +56,43 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void MakeDeployToJsonTransferEd25519()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeployTransferToJson(25, fromAccountKey, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
+            var makeDeployResult = casperClient.DeployService.TransferToJson(25, fromAccountKey, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             Assert.IsNotNull(makeDeployResult);
         }
 
         //[TestMethod]
-        public void MakeDeployToJsonTransferSecp256k1()
+        public void DelegateToJsonSecp256k1()
         {
             fromAccountKey = "0203a9cd2472eeedb7081dd87ecae04d8fe1cedbf5e6a9fcb158ad966d94c63d2c6d";
 
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeployDelegateToJson(25, fromAccountKey, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+            var makeDeployResult = casperClient.DeployService.DelegateToJson(25, fromAccountKey, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
 
             Assert.IsNotNull(makeDeployResult);
         }
 
 
         [TestMethod]
-        public void MakeDeployToJsonDelegateEd25519()
+        public void DelegateToJsonEd25519()
         {
             string delegateAccount = "01da19d95aae08da9df0c3a7ba8fbb368af4fb99e7f522b6471963473295955031";
             string validatorAccount = "01c4328cde0ce19e18e8bf61cb0f62af889b928a1b958ce69c401e21b07fb7acd6";
 
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeployDelegateToJson(97.39999, delegateAccount, validatorAccount, 1, @"C:\tmp\Keys\Phanis10_public_key.pem", @"C:\tmp\Keys\Phanis10_secret_key.pem", SignAlgorithmEnum.ed25519);
+            var makeDeployResult = casperClient.DeployService.DelegateToJson(20, delegateAccount, validatorAccount, 1, @"C:\tmp\Keys\Phanis10_public_key.pem", @"C:\tmp\Keys\Phanis10_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             Assert.IsNotNull(makeDeployResult);
         }
 
-        //[TestMethod]
-        public void MakeDeployToJsonDelegateSecp256k1()
+        [TestMethod]
+        public void UndelegateToJsonEd25519()
         {
+            string delegateAccount = "01da19d95aae08da9df0c3a7ba8fbb368af4fb99e7f522b6471963473295955031";
             string validatorAccount = "01c4328cde0ce19e18e8bf61cb0f62af889b928a1b958ce69c401e21b07fb7acd6";
 
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeployDelegateToJson(25, fromAccountKey, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+            var makeDeployResult = casperClient.DeployService.UndelegateToJson(20, delegateAccount, validatorAccount, 1, @"C:\tmp\Keys\Phanis10_public_key.pem", @"C:\tmp\Keys\Phanis10_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             Assert.IsNotNull(makeDeployResult);
         }

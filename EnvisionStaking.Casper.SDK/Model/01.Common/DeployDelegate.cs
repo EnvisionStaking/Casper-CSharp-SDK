@@ -9,15 +9,11 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
 {
     [Serializable]
     public class DeployDelegate : DeployExecutable,IHasTag
-    {
-        private string entryPoint = "delegate";
+    {        
         public string hash { get; set; }
 
-        public string entry_point
-        {
-            get { return entryPoint; }
-            set { entryPoint = value; }
-        }
+        public string entry_point { get; set; }
+        
         public DeployDelegate(List<DeployNamedArg> args) : base(args)
         {
            
