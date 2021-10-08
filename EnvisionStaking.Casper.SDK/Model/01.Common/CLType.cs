@@ -70,8 +70,6 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
             PublicKey = 22
         };
 
-        private CLTypeEnum clTypeEnum;
-
         public static bool isNumeric(CLTypeEnum clType)
         {
             switch (clType)

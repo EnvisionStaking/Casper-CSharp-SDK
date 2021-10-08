@@ -27,7 +27,7 @@ namespace EnvisionStaking.Casper.SDK.Services
     {
         private const int BLOCKDELAY = 5000;
         private const int ERADELAY = 60000;
-
+        private const int DEPLOYDELAY = 2000;
         public RpcService(string rpcUrl, string jsonRpcVersion = "2.0", string jsonRpcId = "0")
         {
             JsonRpcVersion = jsonRpcVersion;
@@ -259,6 +259,29 @@ namespace EnvisionStaking.Casper.SDK.Services
 
             return RpcClient<PutDeployTransferRequest, PutDeployResult>(RpCUrl, request, HttpMethod.Post);
         }
+
+        public PutDeployResult PutDeploy(PutDeployStoredContractByHashRequest request)
+        {
+
+            return RpcClient<PutDeployStoredContractByHashRequest , PutDeployResult>(RpCUrl, request, HttpMethod.Post);
+        }
+
+        public PutDeployResult PutDeploy(PutDeployStoredContractByNameRequest request)
+        {
+
+            return RpcClient<PutDeployStoredContractByNameRequest, PutDeployResult>(RpCUrl, request, HttpMethod.Post);
+        }
+        public PutDeployResult PutDeploy(PutDeployStoredVersionedContractByHashRequest request)
+        {
+
+            return RpcClient<PutDeployStoredVersionedContractByHashRequest, PutDeployResult>(RpCUrl, request, HttpMethod.Post);
+        }
+
+        public PutDeployResult PutDeploy(PutDeployStoredVersionedContractByNameRequest request)
+        {
+
+            return RpcClient<PutDeployStoredVersionedContractByNameRequest, PutDeployResult>(RpCUrl, request, HttpMethod.Post);
+        }
         #endregion
 
         #region Era
@@ -326,6 +349,8 @@ namespace EnvisionStaking.Casper.SDK.Services
 
             return block.result.block.header.era_id;
         }
+
+        
 
         public async Task<int> AwaitUntilNEraAsync(int untilNEraId)
         {

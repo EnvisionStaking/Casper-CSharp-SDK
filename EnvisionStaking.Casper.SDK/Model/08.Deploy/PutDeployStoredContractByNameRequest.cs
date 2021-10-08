@@ -6,15 +6,15 @@ using System.Text;
 
 namespace EnvisionStaking.Casper.SDK.Model.DeployObject
 {
-    public class PutDeployTransferRequest : Base.Request
+    public class PutDeployStoredContractByNameRequest : Base.Request
     {
-        public PutDeployTransferRequest()
+        public PutDeployStoredContractByNameRequest()
         {
             this.method = "account_put_deploy";
-            this.Parameters = new PutDeployTransferParameters();
+            this.Parameters = new PutDeployStoredContractByNameParameters();
         }
 
         [JsonProperty("params")]
-        public PutDeployTransferParameters Parameters { get; set; }
+        public PutDeployStoredContractByNameParameters Parameters { get; set; }
     }
 }

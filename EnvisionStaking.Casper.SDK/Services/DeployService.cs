@@ -27,7 +27,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             return rpcSvc.GetDeploy(deployHash);
         }
 
-        #region Transfer
+       #region Transfer
         public PutDeployResult Transfer(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
         {
             PutDeployTransferRequest request = MakeDeployTransfer(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm);
@@ -47,11 +47,11 @@ namespace EnvisionStaking.Casper.SDK.Services
             putDeployRequest.Parameters.deploy.payment = NewPayment(10000);
 
             //Set Transfer
-            putDeployRequest.Parameters.deploy.session = new PutDeploySessionTransfer();
+            putDeployRequest.Parameters.deploy.session = new DeploySessionTransfer();
             putDeployRequest.Parameters.deploy.session.Transfer = NewTransfer(normAmount, toAccount, id);
 
             //Set Header
-            putDeployRequest.Parameters.deploy.header = new PutDeployHeader();
+            putDeployRequest.Parameters.deploy.header = new DeployHeader();
             putDeployRequest.Parameters.deploy.header.account = fromAccount;
             putDeployRequest.Parameters.deploy.header.timestamp = DateTime.Now;
             putDeployRequest.Parameters.deploy.header.ttl = "30m";
@@ -83,13 +83,13 @@ namespace EnvisionStaking.Casper.SDK.Services
         #region Delegate\Undelegate
         public PutDeployResult Delegate(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
         {
-            PutDeployTransferRequest request = MakeDeployTransfer(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm);
+            var request = MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Delegate);
             return rpcSvc.PutDeploy(request);
         }
 
         public PutDeployResult Undelegate(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
         {
-            PutDeployTransferRequest request = MakeDeployTransfer(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm);
+            var request = MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Undelegate);
             return rpcSvc.PutDeploy(request);
         }
 
@@ -103,14 +103,14 @@ namespace EnvisionStaking.Casper.SDK.Services
             return JsonConvert.SerializeObject(MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Undelegate), JsonUtil.JsonSerializerSettings());
         }
 
-        public PutDeployDelegateRequest MakeDeployDelegateUndelegate(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, StakingDeployEnum stakingDeploy)
+        public PutDeployStoredContractByHashRequest MakeDeployDelegateUndelegate(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, StakingDeployEnum stakingDeploy)
         {
             var normAmount = (ulong)(amount * 1000000000);
-            PutDeployDelegateRequest putDeployRequest = new PutDeployDelegateRequest();
+            PutDeployStoredContractByHashRequest putDeployRequest = new PutDeployStoredContractByHashRequest();
             putDeployRequest.id = rpcSvc.JsonRpcId;
             putDeployRequest.jsonrpc = rpcSvc.JsonRpcVersion;
-            putDeployRequest.Parameters = new PutDeployDelegateParameters();
-            putDeployRequest.Parameters.deploy = new PutDeployDelegate();
+            putDeployRequest.Parameters = new PutDeployStoredContractByHashParameters();
+            putDeployRequest.Parameters.deploy = new PutDeployStoredContractByHash();
 
             //Set Payment for Delegate or Undelegate
             if (stakingDeploy == StakingDeployEnum.Delegate)
@@ -123,7 +123,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             }
 
             //Set Transfer
-            putDeployRequest.Parameters.deploy.session = new PutDeploySessionDelegate();
+            putDeployRequest.Parameters.deploy.session = new DeploySessionStoredContractByHash();
             putDeployRequest.Parameters.deploy.session.StoredContractByHash = NewDelegate(normAmount, delegatorAccount, validatorAccount, id);
             putDeployRequest.Parameters.deploy.session.StoredContractByHash.entry_point = stakingDeploy.ToString().ToLower();
 
@@ -131,7 +131,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             putDeployRequest.Parameters.deploy.session.StoredContractByHash.hash = "ccb576d6ce6dec84a551e48f0d0b7af89ddba44c7390b690036257a04a3ae9ea";
 
             //Set Header
-            putDeployRequest.Parameters.deploy.header = new PutDeployHeader();
+            putDeployRequest.Parameters.deploy.header = new DeployHeader();
             putDeployRequest.Parameters.deploy.header.account = delegatorAccount;
             putDeployRequest.Parameters.deploy.header.timestamp = DateTime.Now;
             putDeployRequest.Parameters.deploy.header.ttl = "30m";
@@ -156,6 +156,7 @@ namespace EnvisionStaking.Casper.SDK.Services
 
         #endregion
 
+        #region Other
         private Approval CreateAndSignApproval(string fromAccount, string deployHash, Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keys)
         {
             byte[] hashValueByte = ByteUtil.HexToByteArray(deployHash);
@@ -183,7 +184,7 @@ namespace EnvisionStaking.Casper.SDK.Services
 
             return approval;
         }
-        private byte[] GetSerializedHeader(PutDeployHeader header)
+        private byte[] GetSerializedHeader(DeployHeader header)
         {
             byte[] bytes;
 
@@ -199,7 +200,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             return bytes;
         }
 
-        private string GetBodyHashTransfer(PutDeployPayment payment, DeployTransfer transfer)
+        private string GetBodyHashTransfer(DeployPayment payment, DeployTransfer transfer)
         {
             byte[] paymentBytes = payment.ModuleBytes.ToBytes();
 
@@ -210,7 +211,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             return hashSvc.GetHashToHexFixedSize(combined, 32);
         }
 
-        private string GetBodyHashDelegate(PutDeployPayment payment, DeployDelegate deployDelegate)
+        private string GetBodyHashDelegate(DeployPayment payment, DeployStoredContractByHash deployDelegate)
         {
             byte[] paymentBytes = payment.ModuleBytes.ToBytes();
 
@@ -221,7 +222,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             return hashSvc.GetHashToHexFixedSize(combined, 32);
         }
 
-        private PutDeployPayment NewPayment(decimal paymentAmount)
+        private DeployPayment NewPayment(decimal paymentAmount)
         {
             decimal standardPayment = paymentAmount;
             string standardPaymentByte = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512SerializerWithLength(standardPayment));
@@ -229,7 +230,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             var argsPayment = new List<DeployNamedArg>();
             argsPayment.Add(new DeployNamedArg("amount", new CLValue() { cl_type = CLType.CLTypeEnum.U512, bytes = standardPaymentByte, parsed = standardPayment.ToString() }));
 
-            var payment = new PutDeployPayment();
+            var payment = new DeployPayment();
             payment.ModuleBytes = new DeployModuleBytes(argsPayment);
             payment.ModuleBytes.module_bytes = "";
 
@@ -250,7 +251,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             return new DeployTransfer(argsTransfer);
         }
 
-        private DeployDelegate NewDelegate(ulong amount, string delegatorAccount, string validatorAccount, ulong id)
+        private DeployStoredContractByHash NewDelegate(ulong amount, string delegatorAccount, string validatorAccount, ulong id)
         {
             string amountBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512SerializerWithLength(amount));
 
@@ -259,7 +260,8 @@ namespace EnvisionStaking.Casper.SDK.Services
             argsDelegate.Add(new DeployNamedArg("validator", new CLValue() { cl_type = CLType.CLTypeEnum.PublicKey, bytes = validatorAccount, parsed = validatorAccount }));
             argsDelegate.Add(new DeployNamedArg("amount", new CLValue() { cl_type = CLType.CLTypeEnum.U512, bytes = amountBytes, parsed = amount.ToString() }));
 
-            return new DeployDelegate(argsDelegate);
+            return new DeployStoredContractByHash(argsDelegate);
         }
+        #endregion
     }
 }

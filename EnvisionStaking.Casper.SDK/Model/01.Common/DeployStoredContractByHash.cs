@@ -8,13 +8,13 @@ using System.Text;
 namespace EnvisionStaking.Casper.SDK.Model.Common
 {
     [Serializable]
-    public class DeployDelegate : DeployExecutable,IHasTag
+    public class DeployStoredContractByHash : DeployExecutable,IHasTag
     {        
         public string hash { get; set; }
 
         public string entry_point { get; set; }
         
-        public DeployDelegate(List<DeployNamedArg> args) : base(args)
+        public DeployStoredContractByHash(List<DeployNamedArg> args) : base(args)
         {
            
         }

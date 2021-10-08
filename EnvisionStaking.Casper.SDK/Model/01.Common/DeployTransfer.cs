@@ -8,8 +8,7 @@ using System.Text;
 namespace EnvisionStaking.Casper.SDK.Model.Common
 {
     [Serializable]
-    public class DeployTransfer : DeployExecutable,IHasTag
-    {
+    public class DeployTransfer : DeployExecutable,IHasTag    {
 
         public DeployTransfer(List<DeployNamedArg> args) : base(args)
         {
