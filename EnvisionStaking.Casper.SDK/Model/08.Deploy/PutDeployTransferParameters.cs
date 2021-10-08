@@ -12,12 +12,13 @@ namespace EnvisionStaking.Casper.SDK.Model.DeployObject
         public PutDeployTransfer deploy { get; set; }
     }
     public class PutDeployTransfer
-    {       
+    {
+        public List<Approval> approvals { get; set; }
         public string hash { get; set; }
         public PutDeployHeader header { get; set; }
         public PutDeployPayment payment { get; set; }
         public PutDeploySessionTransfer session { get; set; }
-        public List<Approval> approvals { get; set; }
+        
     }
     [Serializable]
     public class PutDeployHeader

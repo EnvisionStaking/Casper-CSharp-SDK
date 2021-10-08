@@ -101,19 +101,20 @@ namespace EnvisionStaking.Casper.SDK.Services
 
         public byte[] GetSignatureSecp256k1(AsymmetricKeyParameter privateKey, byte[] toSign)
         {
-            var signer = new ECDsaSigner();
+            var signer = SignerUtilities.GetSigner("SHA-256withPLAIN-ECDSA");
             signer.Init(true, privateKey);
-            var signature = signer.GenerateSignature(toSign);
-            return ByteUtil.CombineBytes(signature[0].ToByteArrayUnsigned(), signature[1].ToByteArrayUnsigned());
-        }
-        
+            signer.BlockUpdate(toSign, 0, toSign.Length);
+            var signature = signer.GenerateSignature();
+            return signature;
+        }       
+
         public bool VerifySignatureSecp256k1(AsymmetricKeyParameter publicKeyParameters, byte[] message, BigInteger[] signed)
         {
             var signer = new ECDsaSigner();
             signer.Init(false, publicKeyParameters);
             return signer.VerifySignature(message, signed[0], signed[1]);
         }
-             
+
         private byte[] ReadPemToByte(Stream keyStream)
         {
             TextReader textReader = new StreamReader(keyStream);

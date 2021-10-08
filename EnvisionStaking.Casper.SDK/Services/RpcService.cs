@@ -11,6 +11,7 @@ using EnvisionStaking.Casper.SDK.Model.NodePeers;
 using EnvisionStaking.Casper.SDK.Model.NodeStatus;
 using EnvisionStaking.Casper.SDK.Model.StateItem;
 using EnvisionStaking.Casper.SDK.Model.StateRootHash;
+using EnvisionStaking.Casper.SDK.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -405,7 +406,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         {
             string result = RpcClient<T>(url, request, httpMethod);
             //dynamic temp = JsonConvert.DeserializeObject(result);
-            var temp = JsonConvert.DeserializeObject<K>(result);
+            var temp = JsonConvert.DeserializeObject<K>(result, JsonUtil.JsonSerializerSettings());
             var tempResultObject = temp as Result;
             if (tempResultObject.error != null)
             {
@@ -416,7 +417,7 @@ namespace EnvisionStaking.Casper.SDK.Services
 
         public string RpcClient<T>(string url, T request, HttpMethod httpMethod)
         {
-            string jsonString = JsonConvert.SerializeObject(request);
+            string jsonString = JsonConvert.SerializeObject(request, JsonUtil.JsonSerializerSettings());
             var data = new StringContent(jsonString);
             using (var httpClient = new HttpClient())
             {
@@ -433,18 +434,6 @@ namespace EnvisionStaking.Casper.SDK.Services
                 string result = response.Content.ReadAsStringAsync().Result;
                 return result;
             }
-        }
-
-        public K GetClient<K>(string url)
-        {
-            string result = GetClient(url);
-            var temp = JsonConvert.DeserializeObject<K>(result);
-            var tempResultObject = temp as Result;
-            if (tempResultObject.error != null)
-            {
-                HandleRpcException(tempResultObject.error);
-            }
-            return temp;
         }
 
         public string GetClient(string Url)

@@ -1,4 +1,4 @@
-# Development Status ~ 93% completion
+# Development Status ~ 98% completion
 
 ## Completed Tasks - Unit Tests Completed - Regression Test pending
 ### RPC Service Synchronous Operations
@@ -26,6 +26,9 @@
 * RPC Service -> PutDeploy - Ed25519 -> Transfer
 * RPC Service -> PutDeploy - Ed25519 -> Delegate
 * RPC Service -> PutDeploy - Ed25519 -> Undelegate
+* RPC Service -> PutDeploy - secp256k1 -> Transfer
+* RPC Service -> PutDeploy - secp256k1 -> Delegate
+* RPC Service -> PutDeploy - secp256k1 -> Undelegate
 * Serializers
 ### RPC Service Asynchronous Operations
 * RPC Service - Async -> GetNextBlockAsync
@@ -70,13 +73,9 @@
 
 
 ## Work In Progress
-* RPC Service -> PutDeploy - secp256k1 -> Transfer
-* RPC Service -> PutDeploy - secp256k1 -> Delegate
-* RPC Service -> PutDeploy - secp256k1 -> Undelegate
-
+* Add Comments in code
 
 ## Not Started Tasks
-* Add Comments in code
 * End-to-end solution example
 * How-to guides: make a transfer, delegate / undelegate, install/execute ERC-20 contract
 * YouTube videos illustrating how-to guides

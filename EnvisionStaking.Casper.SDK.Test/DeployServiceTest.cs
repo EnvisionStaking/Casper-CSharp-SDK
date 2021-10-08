@@ -11,10 +11,11 @@ namespace EnvisionStaking.Casper.SDK.Test
     public class DeployServiceTest
     {
         string rpcUrl = "https://node-clarity-mainnet.make.services/rpc";
-        string fromAccountKey = "01da19d95aae08da9df0c3a7ba8fbb368af4fb99e7f522b6471963473295955031";
-        string toAccountKey = "01c4328cde0ce19e18e8bf61cb0f62af889b928a1b958ce69c401e21b07fb7acd6";
-        //string toAccountKey = "020228782ebc6dc9fc2fd67f08bce741bdd4892ff0c616811bc0cfeff5daf5476bd1";
-        //[TestMethod]
+        string fromAccountKey01 = "01da19d95aae08da9df0c3a7ba8fbb368af4fb99e7f522b6471963473295955031";
+        string fromAccountKey02 = "0203a9cd2472eeedb7081dd87ecae04d8fe1cedbf5e6a9fcb158ad966d94c63d2c6d";
+        string toAccountKey = "01c4328cde0ce19e18e8bf61cb0f62af889b928a1b958ce69c401e21b07fb7acd6";       
+
+        [TestMethod]
         public void GetDeploy()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
@@ -25,62 +26,101 @@ namespace EnvisionStaking.Casper.SDK.Test
             Assert.IsNotNull(result.result.deploy);
         }
 
-        //[TestMethod]
-        public void PutDeployTransferEd25519()
+        #region Transfer
+        [TestMethod]
+        public void TransferEd25519()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.Transfer(25, fromAccountKey, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
+
+            PutDeployResult putDeployResult = null; ;
+            try
+            {
+                putDeployResult = casperClient.DeployService.Transfer(0, fromAccountKey01, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
+
+                Assert.IsNotNull(putDeployResult.error);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(ex.Message.StartsWith("invalid deploy: insufficient transfer amount"));
+            }
+        }
+
+        [TestMethod]
+        public void TransferSecp256k1()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            PutDeployResult putDeployResult = null; ;
+            try
+            {
+                putDeployResult = casperClient.DeployService.Transfer(0, fromAccountKey02, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+
+                Assert.IsNotNull(putDeployResult.error);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(ex.Message.StartsWith("invalid deploy: insufficient transfer amount"));
+            }
+        }
+
+        [TestMethod]
+        public void TransferToJsonEd25519()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var makeDeployResult = casperClient.DeployService.TransferToJson(2.5, fromAccountKey01, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             Assert.IsNotNull(makeDeployResult);
         }
 
-        public void PutDeployTransferSecp256k1()
+        [TestMethod]
+        public void TransferToJsonSecp256k1()
         {
-            fromAccountKey = "0203a9cd2472eeedb7081dd87ecae04d8fe1cedbf5e6a9fcb158ad966d94c63d2c6d";
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.Transfer(25, fromAccountKey, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+            var makeDeployResult = casperClient.DeployService.TransferToJson(2.5, fromAccountKey02, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
 
             Assert.IsNotNull(makeDeployResult);
         }
+        #endregion
 
-        //[TestMethod]
-        public void MakeDeployTransferEd25519()
+        #region Delegate\Undelegate
+
+        [TestMethod]
+        public void DelegateEd25519()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.MakeDeployTransfer(25, fromAccountKey, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
+            PutDeployResult putDeployResult = null; ;
+            try
+            {
+                putDeployResult = casperClient.DeployService.Delegate(0, fromAccountKey01, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
-            Assert.IsNotNull(makeDeployResult);
+                Assert.IsNotNull(putDeployResult.error);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(ex.Message.StartsWith("invalid deploy: insufficient transfer amount"));
+            }
         }
 
-        //[TestMethod]
-        public void MakeDeployToJsonTransferEd25519()
+        public void UnelegateEd25519()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.TransferToJson(25, fromAccountKey, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
+            PutDeployResult putDeployResult = null; ;
+            try
+            {
+                putDeployResult = casperClient.DeployService.Undelegate(0, fromAccountKey01, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
-            Assert.IsNotNull(makeDeployResult);
+                Assert.IsNotNull(putDeployResult.error);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(ex.Message.StartsWith("invalid deploy: insufficient transfer amount"));
+            }
         }
-
-        //[TestMethod]
-        public void DelegateToJsonSecp256k1()
-        {
-            fromAccountKey = "0203a9cd2472eeedb7081dd87ecae04d8fe1cedbf5e6a9fcb158ad966d94c63d2c6d";
-
-            CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.DelegateToJson(25, fromAccountKey, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
-
-            Assert.IsNotNull(makeDeployResult);
-        }
-
 
         [TestMethod]
         public void DelegateToJsonEd25519()
         {
-            string delegateAccount = "01da19d95aae08da9df0c3a7ba8fbb368af4fb99e7f522b6471963473295955031";
-            string validatorAccount = "01c4328cde0ce19e18e8bf61cb0f62af889b928a1b958ce69c401e21b07fb7acd6";
-
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.DelegateToJson(20, delegateAccount, validatorAccount, 1, @"C:\tmp\Keys\Phanis10_public_key.pem", @"C:\tmp\Keys\Phanis10_secret_key.pem", SignAlgorithmEnum.ed25519);
+            var makeDeployResult = casperClient.DeployService.DelegateToJson(0, fromAccountKey01, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             Assert.IsNotNull(makeDeployResult);
         }
@@ -88,13 +128,63 @@ namespace EnvisionStaking.Casper.SDK.Test
         [TestMethod]
         public void UndelegateToJsonEd25519()
         {
-            string delegateAccount = "01da19d95aae08da9df0c3a7ba8fbb368af4fb99e7f522b6471963473295955031";
-            string validatorAccount = "01c4328cde0ce19e18e8bf61cb0f62af889b928a1b958ce69c401e21b07fb7acd6";
-
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var makeDeployResult = casperClient.DeployService.UndelegateToJson(20, delegateAccount, validatorAccount, 1, @"C:\tmp\Keys\Phanis10_public_key.pem", @"C:\tmp\Keys\Phanis10_secret_key.pem", SignAlgorithmEnum.ed25519);
+            var makeDeployResult = casperClient.DeployService.UndelegateToJson(0, fromAccountKey01, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             Assert.IsNotNull(makeDeployResult);
         }
+
+        [TestMethod]
+        public void DelegateSecp256k1()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            PutDeployResult putDeployResult = null; ;
+            try
+            {
+                putDeployResult = casperClient.DeployService.Delegate(0, fromAccountKey02, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+
+                Assert.IsNotNull(putDeployResult.error);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(ex.Message.StartsWith("invalid deploy: insufficient transfer amount"));
+            }
+        }
+
+        [TestMethod]
+        public void UndelegateSecp256k1()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            PutDeployResult putDeployResult = null; ;
+            try
+            {
+                putDeployResult = casperClient.DeployService.Undelegate(0, fromAccountKey02, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+
+                Assert.IsNotNull(putDeployResult.error);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(ex.Message.StartsWith("invalid deploy: insufficient transfer amount"));
+            }
+        }
+
+        [TestMethod]
+        public void DelegateToJsonSecp256k1()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var makeDeployResult = casperClient.DeployService.DelegateToJson(0, fromAccountKey02, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+
+            Assert.IsNotNull(makeDeployResult);
+        }
+
+        [TestMethod]
+        public void UndelegateToJsonSecp256k1()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var makeDeployResult = casperClient.DeployService.UndelegateToJson(0, fromAccountKey02, toAccountKey, 1, @"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+
+            Assert.IsNotNull(makeDeployResult);
+        }
+        #endregion
     }
 }
