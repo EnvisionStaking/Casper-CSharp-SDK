@@ -354,5 +354,16 @@ namespace EnvisionStaking.Casper.SDK.Test
 
             Assert.IsNotNull(result.result.stored_value.EraInfo);
         }
+
+        [TestMethod]
+        public void GetStateItemBalance()
+        {
+            string hash = "balance-fe327f9815a1d016e1143db85e25a86341883949fd75ac1c1e7408a26c5b62ef";
+
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var result = casperClient.RpcService.GetStateItem(hash);
+
+            Assert.IsNotNull(result.result.stored_value.EraInfo);
+        }
     }
 }

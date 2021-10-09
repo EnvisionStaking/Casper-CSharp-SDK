@@ -47,10 +47,37 @@ namespace EnvisionStaking.Casper.SDK.Test
         }
 
         [TestMethod]
+        public void GetKeyPairEd25519()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+
+            FileStream publicKeyStream = File.OpenRead(@"keys\Ed25519_Test_public_key.pem");
+            FileStream privateKeyStream = File.OpenRead(@"keys\Ed25519_Test_secret_key.pem");
+
+            var keyPair = casperClient.SigningService.GetKeyPair(publicKeyStream, privateKeyStream, SignAlgorithmEnum.ed25519);
+
+            Assert.IsNotNull(keyPair);
+        }
+
+        [TestMethod]
+        public void GetKeyPairSec256k1()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+
+            FileStream publicKeyStream = File.OpenRead(@"keys\Secp256k1_Test_public_key.pem");
+            FileStream privateKeyStream = File.OpenRead(@"keys\Secp256k1_Test_secret_key.pem");
+
+            var keyPair = casperClient.SigningService.GetKeyPair(publicKeyStream, privateKeyStream, SignAlgorithmEnum.secp256k1);
+
+            Assert.IsNotNull(keyPair);
+        }
+
+
+        [TestMethod]
         public void VerifySignatureByKeyPairFromFileEd25519()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\public_key.pem", @"keys\secret_key.pem", SignAlgorithmEnum.ed25519);
+            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             var messageToSign = Encoding.UTF8.GetBytes("Test Message");
 
@@ -65,7 +92,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void VerifySignatureByKeyPairFromFileChangeMessageEd25519()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\public_key.pem", @"keys\secret_key.pem", SignAlgorithmEnum.ed25519);
+            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             var messageToSign = Encoding.UTF8.GetBytes("Test Message");
             var messageToSignChanged = Encoding.UTF8.GetBytes("Test Message Changed");
@@ -77,67 +104,67 @@ namespace EnvisionStaking.Casper.SDK.Test
             Assert.IsFalse(signatureIsVerified);
         }
 
-        //[TestMethod]
-        //public void VerifySignatureByGeneratedKeyPairSecp256k1()
-        //{
-        //    CasperClient casperClient = new CasperClient(rpcUrl);
-        //    var keyPair = casperClient.SigningService.GenerateKeyPair(SignAlgorithmEnum.secp256k1);
+        [TestMethod]
+        public void VerifySignatureByGeneratedKeyPairSecp256k1()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var keyPair = casperClient.SigningService.GenerateKeyPair(SignAlgorithmEnum.secp256k1);
 
-        //    var messageToSign = Encoding.UTF8.GetBytes("Test Message");
+            var messageToSign = Encoding.UTF8.GetBytes("Test Message");
 
-        //    var signedMessage = casperClient.SigningService.GetSignatureSecp256k1(keyPair.Private, messageToSign);
+            var signedMessage = casperClient.SigningService.GetSignatureSecp256k1(keyPair.Private, messageToSign);
 
-        //    var signatureIsVerified = casperClient.SigningService.VerifySignatureSecp256k1(keyPair.Public, messageToSign, signedMessage);
+            var signatureIsVerified = casperClient.SigningService.VerifySignatureSecp256k1(keyPair.Public, messageToSign, signedMessage);
 
-        //    Assert.IsTrue(signatureIsVerified);
-        //}
+            Assert.IsTrue(signatureIsVerified);
+        }
 
-        //[TestMethod]
-        //public void VerifySignatureByGeneratedKeyPairChangeMessageSecp256k1()
-        //{
-        //    CasperClient casperClient = new CasperClient(rpcUrl);
-        //    var keyPair = casperClient.SigningService.GenerateKeyPair(SignAlgorithmEnum.secp256k1);
+        [TestMethod]
+        public void VerifySignatureByGeneratedKeyPairChangeMessageSecp256k1()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var keyPair = casperClient.SigningService.GenerateKeyPair(SignAlgorithmEnum.secp256k1);
 
-        //    var messageToSign = Encoding.UTF8.GetBytes("Test Message");
-        //    var messageToSignChanged = Encoding.UTF8.GetBytes("Test Message Changed");
+            var messageToSign = Encoding.UTF8.GetBytes("Test Message");
+            var messageToSignChanged = Encoding.UTF8.GetBytes("Test Message Changed");
 
-        //    var signedMessage = casperClient.SigningService.GetSignatureSecp256k1(keyPair.Private, messageToSign);
+            var signedMessage = casperClient.SigningService.GetSignatureSecp256k1(keyPair.Private, messageToSign);
 
-        //    var signatureIsVerified = casperClient.SigningService.VerifySignatureSecp256k1(keyPair.Public, messageToSignChanged, signedMessage);
+            var signatureIsVerified = casperClient.SigningService.VerifySignatureSecp256k1(keyPair.Public, messageToSignChanged, signedMessage);
 
-        //    Assert.IsFalse(signatureIsVerified);
-        //}
+            Assert.IsFalse(signatureIsVerified);
+        }
 
-        //[TestMethod]
-        //public void VerifySignatureByKeyPairFromFileSecp256k1()
-        //{
-        //    CasperClient casperClient = new CasperClient(rpcUrl);
-        //    var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+        [TestMethod]
+        public void VerifySignatureByKeyPairFromFileSecp256k1()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
 
-        //    var messageToSign = Encoding.UTF8.GetBytes("Test Message");
+            var messageToSign = Encoding.UTF8.GetBytes("Test Message");
 
-        //    var signedMessage = casperClient.SigningService.GetSignatureSecp256k1(keyPair.Private, messageToSign);
+            var signedMessage = casperClient.SigningService.GetSignatureSecp256k1(keyPair.Private, messageToSign);
 
-        //    var signatureIsVerified = casperClient.SigningService.VerifySignatureSecp256k1(keyPair.Public, messageToSign, signedMessage);
+            var signatureIsVerified = casperClient.SigningService.VerifySignatureSecp256k1(keyPair.Public, messageToSign, signedMessage);
 
-        //    Assert.IsTrue(signatureIsVerified);
-        //}
+            Assert.IsTrue(signatureIsVerified);
+        }
 
-        //[TestMethod]
-        //public void VerifySignatureByKeyPairFromFileChangeMessageSecp256k1()
-        //{
-        //    CasperClient casperClient = new CasperClient(rpcUrl);
-        //    var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+        [TestMethod]
+        public void VerifySignatureByKeyPairFromFileChangeMessageSecp256k1()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
 
-        //    var messageToSign = Encoding.UTF8.GetBytes("Test Message");
-        //    var messageToSignChanged = Encoding.UTF8.GetBytes("Test Message Changed");
+            var messageToSign = Encoding.UTF8.GetBytes("Test Message");
+            var messageToSignChanged = Encoding.UTF8.GetBytes("Test Message Changed");
 
-        //    var signedMessage = casperClient.SigningService.GetSignatureSecp256k1ToBigInteger(keyPair.Private, messageToSign);
+            var signedMessage = casperClient.SigningService.GetSignatureSecp256k1(keyPair.Private, messageToSign);
 
-        //    var signatureIsVerified = casperClient.SigningService.VerifySignatureSecp256k1(keyPair.Public, messageToSignChanged, signedMessage);
+            var signatureIsVerified = casperClient.SigningService.VerifySignatureSecp256k1(keyPair.Public, messageToSignChanged, signedMessage);
 
-        //    Assert.IsFalse(signatureIsVerified);
-        //}
+            Assert.IsFalse(signatureIsVerified);
+        }
 
         [TestMethod]
         public void VerifySignatureByKeyPairFromFileFromDeployHashEd25519()
@@ -151,7 +178,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         };
 
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\public_key.pem", @"keys\secret_key.pem", SignAlgorithmEnum.ed25519);
+            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             var signedMessage = casperClient.SigningService.GetSignatureEd25519(keyPair.Private, message);
 
@@ -165,7 +192,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void ConvertPrivateKeyToPemEd25519()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\public_key.pem", @"keys\secret_key.pem", SignAlgorithmEnum.ed25519);
+            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             var privateKeyPem = casperClient.SigningService.ConvertPrivateKeyToPem(keyPair.Private);
 
@@ -176,7 +203,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         public void ConvertPublicKeyToPemEd25519()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\public_key.pem", @"keys\secret_key.pem", SignAlgorithmEnum.ed25519);
+            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 
             var publicKeyPem = casperClient.SigningService.ConvertPublicKeyToPem(keyPair.Public);
 
@@ -199,31 +226,12 @@ namespace EnvisionStaking.Casper.SDK.Test
 
             Assert.AreEqual(result, signedValue);
         }
-        [TestMethod]
-        public void GetSignatureEd255192()
-        {
-
-            string account = "0203a9cd2472eeedb7081dd87ecae04d8fe1cedbf5e6a9fcb158ad966d94c63d2c6d";
-            string deployHash = "207ecc7c47ebba4d71e9911702fa14d225ec78aab255ac82a59666c4b352bd81";
-            string signedValue = "02f1f61434b35c1ca9c7a864140799f5fc40aca72a45f52ea13bbaeddd8559e65418bd4d3c0a17b69dc89572ed6f01760ba8f18a3cfb39c2d81620a055c2653cde";
-
-            CasperClient casperClient = new CasperClient(rpcUrl);
-            var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
-
-            var signedValueResultBytes = casperClient.SigningService.GetSignatureEd25519(keyPair.Private, ByteUtil.HexToByteArray(deployHash));
-            var signedValueResultHex = ByteUtil.ByteArrayToHex(signedValueResultBytes);
-            var result = account.Substring(0, 2) + signedValueResultHex;
-
-            Assert.AreEqual(result, signedValue);
-        }
-
+        
         [TestMethod]
         public void GetSignatureSecp256k1()
         {
             string account = "0203a9cd2472eeedb7081dd87ecae04d8fe1cedbf5e6a9fcb158ad966d94c63d2c6d";
             string deployHash = "207ecc7c47ebba4d71e9911702fa14d225ec78aab255ac82a59666c4b352bd81";
-            string signedValue = "02f1f61434b35c1ca9c7a864140799f5fc40aca72a45f52ea13bbaeddd8559e65418bd4d3c0a17b69dc89572ed6f01760ba8f18a3cfb39c2d81620a055c2653cde";
-
 
             CasperClient casperClient = new CasperClient(rpcUrl);
             var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
@@ -232,7 +240,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             var signedValueResultHex = ByteUtil.ByteArrayToHex(signedValueResultBytes);
             var result = account.Substring(0, 2) + signedValueResultHex;
 
-            Assert.AreEqual(result, signedValue);
+            Assert.IsTrue(result.Length == 130);
         }
     }
 }

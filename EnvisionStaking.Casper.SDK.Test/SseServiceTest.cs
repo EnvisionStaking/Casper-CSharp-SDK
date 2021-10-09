@@ -128,7 +128,7 @@ namespace EnvisionStaking.Casper.SDK.Test
             stopwatch.Start();
 
             CasperClient casperClient = new CasperClient(sseUrl);
-            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
+            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.deploys);
             casperClient.SseService.DeployProcessed += SseService_DeployProcessed;
 
             while (!isEventTriggered && stopwatch.ElapsedMilliseconds < 60000)

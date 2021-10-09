@@ -189,5 +189,67 @@ namespace EnvisionStaking.Casper.SDK.Test
             Assert.IsNotNull(makeDeployResult);
         }
         #endregion
+
+        #region PutDeploy Operations
+        [TestMethod]
+        public void PutDeployStoredContractByHash()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+
+            //Costruct the Deploy executable item and set the Object parameters 
+            PutDeployStoredContractByHashRequest request = new PutDeployStoredContractByHashRequest();
+            PutDeployResult result = casperClient.RpcService.PutDeploy(request);
+
+            Assert.IsNotNull(result.error);
+        }
+
+        [TestMethod]
+        public void PutDeployStoredContractByName()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+
+            //Costruct the Deploy executable item and set the Object parameters 
+            PutDeployStoredContractByNameRequest request = new PutDeployStoredContractByNameRequest();
+            PutDeployResult result = casperClient.RpcService.PutDeploy(request);
+
+            Assert.IsNotNull(result.error);
+        }
+
+        [TestMethod]
+        public void PutDeployStoredVersionedContractByHash()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+
+            //Costruct the Deploy executable item and set the Object parameters 
+            PutDeployStoredVersionedContractByHashRequest request = new PutDeployStoredVersionedContractByHashRequest();
+            PutDeployResult result = casperClient.RpcService.PutDeploy(request);
+
+            Assert.IsNotNull(result.error);
+        }
+
+        [TestMethod]
+        public void PutDeployStoredVersionedContractByNameRequest()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+
+            //Costruct the Deploy executable item and set the Object parameters 
+            PutDeployStoredVersionedContractByNameRequest request = new PutDeployStoredVersionedContractByNameRequest();
+            PutDeployResult result = casperClient.RpcService.PutDeploy(request);
+
+            Assert.IsNotNull(result.error);
+        }
+
+        [TestMethod]
+        public void PutDeployTransfer()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+
+            //Costruct the Deploy executable item and set the Object parameters 
+            PutDeployTransferRequest request = new PutDeployTransferRequest();
+            PutDeployResult result = casperClient.RpcService.PutDeploy(request);
+
+            Assert.IsNotNull(result.error);
+        }
+        #endregion
     }
 }

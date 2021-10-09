@@ -26,8 +26,6 @@ namespace EnvisionStaking.Casper.SDK.Services
             return GetKeyPair(File.OpenRead(publicKeyFilePath), File.OpenRead(privateKeyFilePath), signAlgorithm);
         }
 
-
-
         public AsymmetricCipherKeyPair GetKeyPair(Stream publicKeyIn, Stream privateKeyIn, SignAlgorithmEnum signAlgorithm)
         {
             if (signAlgorithm == SignAlgorithmEnum.ed25519)
@@ -108,11 +106,13 @@ namespace EnvisionStaking.Casper.SDK.Services
             return signature;
         }       
 
-        public bool VerifySignatureSecp256k1(AsymmetricKeyParameter publicKeyParameters, byte[] message, BigInteger[] signed)
+        public bool VerifySignatureSecp256k1(AsymmetricKeyParameter publicKeyParameters, byte[] message, byte[] signed)
         {
-            var signer = new ECDsaSigner();
+            var signer = SignerUtilities.GetSigner("SHA-256withPLAIN-ECDSA");
             signer.Init(false, publicKeyParameters);
-            return signer.VerifySignature(message, signed[0], signed[1]);
+            signer.BlockUpdate(message, 0, message.Length);
+            var signature = signer.VerifySignature(signed);
+            return signature;
         }
 
         private byte[] ReadPemToByte(Stream keyStream)
