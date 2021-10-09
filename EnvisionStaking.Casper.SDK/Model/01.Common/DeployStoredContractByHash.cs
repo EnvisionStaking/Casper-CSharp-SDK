@@ -1,19 +1,25 @@
 ﻿using EnvisionStaking.Casper.SDK.Interfaces;
 using EnvisionStaking.Casper.SDK.Serialization;
 using EnvisionStaking.Casper.SDK.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace EnvisionStaking.Casper.SDK.Model.Common
 {
-    [Serializable]
     public class DeployStoredContractByHash : DeployExecutable,IHasTag
     {        
         public string hash { get; set; }
 
         public string entry_point { get; set; }
-        
+
+        [JsonConstructor]
+        public DeployStoredContractByHash()
+        {
+
+        }
+
         public DeployStoredContractByHash(List<DeployNamedArg> args) : base(args)
         {
            

@@ -30,6 +30,18 @@ namespace EnvisionStaking.Casper.SDK.Test
         }
 
         [TestMethod]
+        public async Task AwaitUntilDeployCompletedAsync()
+        {
+            var deployHash = "b96bc0f44dd79c6793d16c52e53760004367c8400de0eb17e46edda75289a856";
+
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var deployResult = await casperClient.RpcService.AwaitUntilDeployCompletedAsync(deployHash);
+            
+            Assert.IsNotNull(deployResult.result.execution_results);
+            Assert.IsTrue(deployResult.result.execution_results.Count>0);
+        }
+
+        [TestMethod]
         public async Task AwaitUntilNBlockAsync()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);

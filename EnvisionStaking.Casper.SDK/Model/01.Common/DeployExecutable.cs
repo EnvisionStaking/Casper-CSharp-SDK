@@ -8,16 +8,23 @@ using System.Text;
 
 namespace EnvisionStaking.Casper.SDK.Model.Common
 {
-    [Serializable]
-    public abstract class DeployExecutable
-    {       
 
-        private List<DeployNamedArg> argsObject;
+    public class DeployExecutable
+    {
+        private List<List<object>> argsJsonInternal = null;
 
+        [JsonConstructor]
+        public DeployExecutable()
+        {
+            this.argsObject = new List<DeployNamedArg>();
+        }
         public DeployExecutable(List<DeployNamedArg> args)
         {
             this.argsObject = args;
-        }       
+        }
+
+        [JsonIgnore]
+        public List<DeployNamedArg> argsObject { get; set; }
 
         public List<DeployNamedArg> GetArgs()
         {
@@ -25,8 +32,10 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
         }
 
         [JsonProperty("args")]
+
         public List<List<object>> argsJson
         {
+            set { argsJsonInternal = value; }
             get
             {
                 List<List<object>> jsonObject = new List<List<object>>();
@@ -37,7 +46,8 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
                     temp.Add(row.GetName());
                     if (row.GetValue().cl_type == CLType.CLTypeEnum.BYTE_ARRAY)
                     {
-                        temp.Add(new {
+                        temp.Add(new
+                        {
                             cl_type = new { ByteArray = row.GetValue().ToBytes().Length },
                             bytes = row.GetValue().bytes,
                             parsed = row.GetValue().parsed
@@ -58,13 +68,14 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
                     }
                     jsonObject.Add(temp);
                 }
-                if (jsonObject == null || jsonObject.Count==0)
+                if (jsonObject == null || jsonObject.Count == 0)
                 {
-                    return new List<List<object>>();
+                    return argsJsonInternal;
                 }
                 return jsonObject;
             }
-        }
+        }      
+
         public DeployNamedArg GetNamedArg(String name)
         {
             if ((this.argsObject != null))
@@ -85,7 +96,7 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
         {
             byte[] bytes = TypesSerializer.Getu32Serializer(argsObject.Count);
 
-            foreach (var arg in argsObject)
+            foreach (DeployNamedArg arg in argsObject)
             {
                 bytes = ByteUtil.CombineBytes(bytes, arg.ToBytes());
             }

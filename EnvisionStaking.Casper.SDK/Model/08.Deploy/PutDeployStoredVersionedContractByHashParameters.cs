@@ -7,12 +7,16 @@ using System.Text;
 
 namespace EnvisionStaking.Casper.SDK.Model.DeployObject
 {
-    public class PutDeployStoredVersionedContractByHashParameters : DeployBase
+    public class PutDeployStoredVersionedContractByHashParameters
     {
         public PutDeployStoredVersionedContractByHash deploy { get; set; }
     }
     public class PutDeployStoredVersionedContractByHash
-    {      
+    {
+        public List<Approval> approvals { get; set; }
+        public string hash { get; set; }
+        public DeployHeader header { get; set; }
+        public DeployPayment payment { get; set; }
         public DeploySessionStoredVersionedContractByHash session { get; set; }
     }  
     

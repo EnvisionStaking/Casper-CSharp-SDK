@@ -6,6 +6,6 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
 {
     public partial class Payment
     {
-        public ModuleBytes ModuleBytes { get; set; }
+        public DeployModuleBytes ModuleBytes { get; set; }
     }
 }

@@ -259,7 +259,7 @@ namespace EnvisionStaking.Casper.SDK.Test
         [TestMethod]
         public void GetStateItemDeploy()
         {
-            string hash = "deploy-1498ee265159d1969ef5c404048358fbac7354909c03871d97011558eaf0a121";
+            string hash = "deploy-bc4b4fa65eb906e6d4e383adacb8e8ba14b768029a535b5b1381b2b47847c32e";
 
             CasperClient casperClient = new CasperClient(rpcUrl);
             var result = casperClient.RpcService.GetStateItem(hash);

@@ -1,6 +1,7 @@
 ﻿using EnvisionStaking.Casper.SDK.Interfaces;
 using EnvisionStaking.Casper.SDK.Serialization;
 using EnvisionStaking.Casper.SDK.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +16,11 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
 
         public string entry_point { get; set; }
 
+        [JsonConstructor]
+        public DeployStoredVersionedContractByName()
+        {
+
+        }
         public DeployStoredVersionedContractByName(List<DeployNamedArg> args) : base(args)
         {
            

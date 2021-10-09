@@ -16,6 +16,10 @@ namespace EnvisionStaking.Casper.SDK.Model.Common
             this.ModuleBytes = moduleBytes;
             this.module_bytes = moduleBytesString;
         }
+        [JsonConstructor]
+        public DeployModuleBytes()
+        {           
+        }
 
         public DeployModuleBytes(List<DeployNamedArg> amountArg) : base(amountArg)
         {

@@ -11,8 +11,12 @@ namespace EnvisionStaking.Casper.SDK.Model.DeployObject
     {
         public PutDeployStoredContractByHash deploy { get; set; }
     }
-    public class PutDeployStoredContractByHash : DeployBase
-    {      
+    public class PutDeployStoredContractByHash
+    {
+        public List<Approval> approvals { get; set; }
+        public string hash { get; set; }
+        public DeployHeader header { get; set; }
+        public DeployPayment payment { get; set; }
         public DeploySessionStoredContractByHash session { get; set; }
     }  
     

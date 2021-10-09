@@ -249,8 +249,6 @@ namespace EnvisionStaking.Casper.SDK.Services
             DeployRequest request = new DeployRequest(deployHash);
             request.jsonrpc = JsonRpcVersion;
             request.id = JsonRpcId;
-            var resultJson = RpcClient<DeployRequest>(RpCUrl, request, HttpMethod.Post);
-
             return RpcClient<DeployRequest, DeployResult>(RpCUrl, request, HttpMethod.Post);
         }
 
@@ -350,7 +348,18 @@ namespace EnvisionStaking.Casper.SDK.Services
             return block.result.block.header.era_id;
         }
 
-        
+        public async Task<DeployResult> AwaitUntilDeployCompletedAsync(string deployHash)
+        {
+            var deploy = GetDeploy(deployHash);
+
+            while (deploy.result.execution_results == null || deploy.result.execution_results.Count == 0)
+            {
+                await Task.Delay(DEPLOYDELAY);
+            }
+
+            return await Task.FromResult<DeployResult>(deploy);
+        }
+
 
         public async Task<int> AwaitUntilNEraAsync(int untilNEraId)
         {
@@ -430,7 +439,6 @@ namespace EnvisionStaking.Casper.SDK.Services
         public K RpcClient<T, K>(string url, T request, HttpMethod httpMethod)
         {
             string result = RpcClient<T>(url, request, httpMethod);
-            //dynamic temp = JsonConvert.DeserializeObject(result);
             var temp = JsonConvert.DeserializeObject<K>(result, JsonUtil.JsonSerializerSettings());
             var tempResultObject = temp as Result;
             if (tempResultObject.error != null)
