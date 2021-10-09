@@ -1,9 +1,10 @@
 # Casper C# SDK
 
-Our contribution towards the global adoption of the Casper Network.
+Our contribution towards the global adoption of Casper Network. 
+The .NET C# SDK enables .NET delvelopers to implement enterprise applications on Casper Network.
 
-## Getting Started
-### Casper Client
+# Getting Started
+## Casper Client
 The Casper client is the main class, in which you can interact with Casper Network. 
 
 The following services are available:
@@ -12,9 +13,9 @@ The following services are available:
   * [Common Deploy Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#common-deploy-operations)
   * [Other Deploy Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#other-deploy-operations)
   * [Asynchronous Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#asynchronous-operations)
-* [Server-Sent Events Service - Event Driven Operations]()
-* Hash Service
-* Signing Service
+* [Server-Sent Events Service - Event Driven Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#server-sent-events-service)
+* [Hash Service](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#hash-service)
+* [Signing Service](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#signing-service)
 
 You can instantiate the Casper client as shown below
 ```C#
@@ -448,21 +449,121 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 var deployResult = await casperClient.RpcService.AwaitUntilDeployCompletedAsync(deployHash);
 ```
 ## Server-Sent Events Service
+The Server-Sent Events (SSE) is a server push technology enabling a client to receive automatic updates from a server through an HTTP connection.
+SSE is fully supported by Casper Network. With this SDK you are able to subscribe to events and utilize the event driven operations .
 ### Event Driven Operations
-* ApiVersionUpdated
-* BlockAdded
-* DeployProcessed
-* Fault
-* Step
-* DeployAccepted
-* FinalitySignature
+#### Api Version Updated
+This event triggers every couple of seconds/minutes with the API Verion.
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
 
-#### Hash Service
+CasperClient casperClient = new CasperClient(sseUrl);
+
+casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
+casperClient.SseService.ApiVersionUpdated += SseService_ApiVersionUpdated;
+
+void SseService_ApiVersionUpdated(object sender, SseApiVersion e)
+{
+	result = e;
+}
+```
+#### Block Added
+This event triggers when a Block is added in Casper Network.
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(sseUrl);
+
+casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
+casperClient.SseService.BlockAdded += SseService_BlockAdded;
+
+void SseService_BlockAdded(object sender, SseBlockAdded e)
+{
+	result = e;
+}
+```
+#### Deploy Processed
+This event triggers when a Deploy is Processed in Casper Network.
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(sseUrl);
+
+casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
+casperClient.SseService.DeployProcessed += SseService_DeployProcessed;
+
+void SseService_DeployProcessed(object sender, SseDeployProcessed e)
+{
+	result = e;
+}
+```
+#### Deploy Accepted
+This event triggers when a Deploy is Accepted in Casper Network.
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(sseUrl);
+
+casperClient.SseService = new SseService(sseUrl, SseTypeEnum.deploys);
+casperClient.SseService.DeployAccepted += SseService_DeployAccepted;
+
+void SseService_DeployAccepted(object sender, SseDeployAccepted e)
+{
+	result = e;
+}
+```
+#### Fault Occured
+This event triggers on Fault occurance in Casper Network.
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(sseUrl);
+
+casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
+casperClient.SseService.Fault += SseService_Fault;
+
+void SseService_Fault(object sender, string e)
+{
+	result = e;
+}
+```
+#### Step Processed
+This event triggers when a step is processed in Casper Network.
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(sseUrl);
+
+casperClient.SseService = new SseService(sseUrl, SseTypeEnum.main);
+casperClient.SseService.Step += SseService_Step;
+
+void SseService_Step(object sender, string e)
+{
+	result = e;
+}
+```
+#### Finality Signature
+This event triggers on Finality Signature in Casper Network.
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(sseUrl);
+
+            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.sigs);
+            casperClient.SseService.FinalitySignature += SseService_FinalitySignature;
+
+void SseService_FinalitySignature(object sender, SseFinalitySignature e)
+{
+	result = e;
+}
+```
+
+## Hash Service
 * GetAccountHash
 * GetHashToHex
 * GetHashToBinary
 * 
-#### Signing Service
+## Signing Service
 * GetKeyPairFromFile
 * GetKeyPair
 * GenerateKeyPair
@@ -473,11 +574,11 @@ var deployResult = await casperClient.RpcService.AwaitUntilDeployCompletedAsync(
 * Signing Service - secp256k1  -> GetKeyPairFromFile
 
 
-## How To Guides
+# How To Guides
 
-### How to query Casper Network 
-### How to get events on Casper Network
-### How to make a transfer
-### How to Delegate Tokens
-### How to Undelegate Tokens
+## How to query Casper Network 
+## How to get events on Casper Network
+## How to make a transfer
+## How to Delegate Tokens
+## How to Undelegate Tokens
 
