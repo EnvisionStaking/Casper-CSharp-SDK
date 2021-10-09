@@ -7,8 +7,12 @@ Our contribution towards the global adoption of the Casper Network.
 The Casper client is the main class, in which you can interact with Casper Network. 
 
 The following services are available:
-* RPC Service
-* SSE Service
+* [Remote Procedure Calls Service](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#remote-procedure-calls-service)
+  * [Quering Casper Network](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#quering-casper-network)
+  * [Common Deploy Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#common-deploy-operations)
+  * [Other Deploy Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#other-deploy-operations)
+  * [Asynchronous Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#asynchronous-operations)
+* [Server-Sent Events Service - Event Driven Operations]()
 * Hash Service
 * Signing Service
 
@@ -443,7 +447,7 @@ var deployHash = "b96bc0f44dd79c6793d16c52e53760004367c8400de0eb17e46edda75289a8
 CasperClient casperClient = new CasperClient(rpcUrl);
 var deployResult = await casperClient.RpcService.AwaitUntilDeployCompletedAsync(deployHash);
 ```
-
+## Server-Sent Events Service
 ### Event Driven Operations
 * ApiVersionUpdated
 * BlockAdded
