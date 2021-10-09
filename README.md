@@ -1,21 +1,12 @@
-# Casper C# SDK
+# Casper .NET C# SDK
 
 Our contribution towards the global adoption of Casper Network. 
 The .NET C# SDK enables .NET delvelopers to implement enterprise applications on Casper Network.
 
 # Getting Started
+If you are not familiar with Casper Network, our advice is to navigate to [Casper Network Documents](https://docs.casperlabs.io/en/latest/faq/index.html) and get prepared before proceeding with the SDK.
 ## Casper Client
-The Casper client is the main class, in which you can interact with Casper Network. 
-
-The following services are available:
-* [Remote Procedure Calls Service](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#remote-procedure-calls-service)
-  * [Quering Casper Network](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#quering-casper-network)
-  * [Common Deploy Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#common-deploy-operations)
-  * [Other Deploy Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#other-deploy-operations)
-  * [Asynchronous Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#asynchronous-operations)
-* [Server-Sent Events Service - Event Driven Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#server-sent-events-service)
-* [Hash Service](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#hash-service)
-* [Signing Service](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#signing-service)
+The Casper client is the main class of the SDK, in which you can interact with Casper Network. 
 
 You can instantiate the Casper client as shown below
 ```C#
@@ -25,8 +16,17 @@ You can instantiate the Casper client as shown below
 string rpcUrl = "http://{NodeIp}:{7777}/rpc";
 CasperClient casperClient = new CasperClient(rpcUrl);
 ```
-
-> You cand find the available Connected Peers [here](https://cspr.live/tools/peers)
+> You can find the available Connected Peers [here](https://cspr.live/tools/peers)
+> 
+The following services are available in the SDK via CasperClient:
+* [Remote Procedure Calls Service](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#remote-procedure-calls-service)
+  * [Quering Casper Network](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#quering-casper-network)
+  * [Common Deploy Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#common-deploy-operations)
+  * [Other Deploy Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#other-deploy-operations)
+  * [Asynchronous Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#asynchronous-operations)
+* [Server-Sent Events Service - Event Driven Operations](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#server-sent-events-service)
+* [Hash Service](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#hash-service)
+* [Signing Service](https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md#signing-service)
 
 ## Remote Procedure Calls Service
 The RPC service uses Remote Procedure Calls (RPC) in Casper Network nodes. 
@@ -450,8 +450,10 @@ var deployResult = await casperClient.RpcService.AwaitUntilDeployCompletedAsync(
 ```
 ## Server-Sent Events Service
 The Server-Sent Events (SSE) is a server push technology enabling a client to receive automatic updates from a server through an HTTP connection.
-SSE is fully supported by Casper Network. With this SDK you are able to subscribe to events and utilize the event driven operations .
+SSE is fully supported by Casper Network. With this SDK you are able to subscribe to events and utilize the event driven operations.
+
 ### Event Driven Operations
+
 #### Api Version Updated
 This event triggers every couple of seconds/minutes with the API Verion.
 ```C#
@@ -549,8 +551,8 @@ string rpcUrl = "http://{NodeIp}:{7777}/rpc";
 
 CasperClient casperClient = new CasperClient(sseUrl);
 
-            casperClient.SseService = new SseService(sseUrl, SseTypeEnum.sigs);
-            casperClient.SseService.FinalitySignature += SseService_FinalitySignature;
+casperClient.SseService = new SseService(sseUrl, SseTypeEnum.sigs);
+casperClient.SseService.FinalitySignature += SseService_FinalitySignature;
 
 void SseService_FinalitySignature(object sender, SseFinalitySignature e)
 {
@@ -559,20 +561,172 @@ void SseService_FinalitySignature(object sender, SseFinalitySignature e)
 ```
 
 ## Hash Service
-* GetAccountHash
-* GetHashToHex
-* GetHashToBinary
-* 
-## Signing Service
-* GetKeyPairFromFile
-* GetKeyPair
-* GenerateKeyPair
-* GetSignature
-* VerifySignature
-* ConvertPrivateKeyToPemAndSaveToDisk
-* ConvertPublicKeyToPemAndSaveToDisk
-* Signing Service - secp256k1  -> GetKeyPairFromFile
+The hash service utilizes BLAKE2b which is a cryptographic hash function. 
+Blake2b is optimized for 64-bit and produces digests of any size between 1 and 64 bytes.
+#### Get Account Hash
+Get the Account Hash from the Account key with BLAKE2b.
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
 
+string publicKey = "01c4328cde0ce19e18e8bf61cb0f62af889b928a1b958ce69c401e21b07fb7acd6";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+var result = casperClient.HashService.GetAccountHash(publicKey);
+```
+#### Get Hash To Hexadecimal
+Get the Hash to hexadecimal value with BLAKE2b.
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+string message = "Hello World";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+var result = casperClient.HashService.GetHashToHexFixedSize(Encoding.UTF8.GetBytes(message), 32);
+```
+#### Get Hash To Byte Array
+Get the Hash to Byte Array with BLAKE2b.
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+string message = "Hello World";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+var result = casperClient.HashService.GetHashToBinaryFixedSize(Encoding.UTF8.GetBytes(message), 32);
+```
+
+## Signing Service
+Casper Network currently supports two Digital Signature Algorithms Ed25519 and Secp256k1. These algorithms are responsible for Deployent signing on Casper Network.
+Ed25519 is an EdDSA signature scheme using SHA-512 (SHA-2) and Curve25519.
+Secp256k1 is an EdDSA signature scheme using elliptic curve and became very popular due to Bitcoin usage.
+### Ed25519 Methods
+#### Get Key Pair From File Ed25519
+Get the Public-Private key pair from pem file
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Ed25519_Test_public_key.pem", @"Ed25519_Test_keys\secret_key.pem", SignAlgorithmEnum.ed25519);
+```
+#### Get Key Pair From Stream Ed25519
+Get the Public-Private key pair from Stream
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+
+//Get files to Stream
+FileStream publicKeyStream = File.OpenRead(@"keys\Ed25519_Test_public_key.pem");
+FileStream privateKeyStream = File.OpenRead(@"keys\Ed25519_Test_secret_key.pem");
+
+var keyPair = casperClient.SigningService.GetKeyPair(publicKeyStream, privateKeyStream, SignAlgorithmEnum.ed25519);
+```
+#### Generate Key Pair Ed25519
+Generate Key Pair
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+
+var keyPair = casperClient.SigningService.GenerateKeyPair(SignAlgorithmEnum.ed25519);
+```
+#### Generate Signature Ed25519
+Generate Signature
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+string account = "0123e52cf5d878e4ba3c388a6e1969a56a5b86d52f3c8fd0dd8463797c90b4dad6";
+string deployHash = "55761719042cf6ffd1b74005cd946a9d70dd363a63a495f5ecaa6d4990a256d5";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
+
+var signedValueResultBytes = casperClient.SigningService.GetSignatureEd25519(keyPair.Private, ByteUtil.HexToByteArray(deployHash));
+var signedValueResultHex = ByteUtil.ByteArrayToHex(signedValueResultBytes);
+
+//The fist byte within the signature is 1 in the case of an Ed25519 signature or 2 in the case of Secp256k1.
+var result = account.Substring(0, 2) + signedValueResultHex;
+```
+#### Verify Signature Ed25519
+Verify Signature
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+var keyPair = casperClient.SigningService.GenerateKeyPair(SignAlgorithmEnum.ed25519);
+
+var messageToSign = Encoding.UTF8.GetBytes("Test Message");
+var messageToSignChanged = Encoding.UTF8.GetBytes("Test Message Changed");
+
+var signedMessage = casperClient.SigningService.GetSignatureEd25519(keyPair.Private, messageToSign);
+
+var signatureIsVerified = casperClient.SigningService.VerifySignatureEd25519(keyPair.Public, messageToSignChanged, signedMessage);
+```
+### Secp256k1 Methods
+#### Get Key Pair From File Secp256k1
+Get the Public-Private key pair from pem file
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+```
+#### Get Key Pair From Stream Secp256k1
+Get the Public-Private key pair from Stream
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+
+//Get files to Stream
+FileStream publicKeyStream = File.OpenRead(@"keys\Secp256k1_Test_public_key.pem");
+FileStream privateKeyStream = File.OpenRead(@"keys\Secp256k1_Test_secret_key.pem");
+
+var keyPair = casperClient.SigningService.GetKeyPair(publicKeyStream, privateKeyStream, SignAlgorithmEnum.secp256k1);
+```
+#### Generate Key Pair Secp256k1
+Generate Key Pair
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+
+var keyPair = casperClient.SigningService.GenerateKeyPair(SignAlgorithmEnum.secp256k1);
+```
+#### Generate Signature Secp256k1
+Generate Signature
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+string account = "0203a9cd2472eeedb7081dd87ecae04d8fe1cedbf5e6a9fcb158ad966d94c63d2c6d";
+string deployHash = "207ecc7c47ebba4d71e9911702fa14d225ec78aab255ac82a59666c4b352bd81";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+var keyPair = casperClient.SigningService.GetKeyPairFromFile(@"keys\Secp256k1_Test_public_key.pem", @"keys\Secp256k1_Test_secret_key.pem", SignAlgorithmEnum.secp256k1);
+
+var signedValueResultBytes = casperClient.SigningService.GetSignatureSecp256k1(keyPair.Private, ByteUtil.HexToByteArray(deployHash));
+var signedValueResultHex = ByteUtil.ByteArrayToHex(signedValueResultBytes);
+            
+//The fist byte within the signature is 1 in the case of an Ed25519 signature or 2 in the case of Secp256k1.
+var result = account.Substring(0, 2) + signedValueResultHex;
+```
+#### Verify Signature Secp256k1
+Verify Signature
+```C#
+string rpcUrl = "http://{NodeIp}:{7777}/rpc";
+
+CasperClient casperClient = new CasperClient(rpcUrl);
+var keyPair = casperClient.SigningService.GenerateKeyPair(SignAlgorithmEnum.secp256k1);
+
+var messageToSign = Encoding.UTF8.GetBytes("Test Message");
+
+var signedMessage = casperClient.SigningService.GetSignatureSecp256k1(keyPair.Private, messageToSign);
+
+var signatureIsVerified = casperClient.SigningService.VerifySignatureSecp256k1(keyPair.Public, messageToSign, signedMessage);
+```
+Pending
+make-deploy
+sign-deploy
+dispatch-deploy
 
 # How To Guides
 
