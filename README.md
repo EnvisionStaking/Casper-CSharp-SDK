@@ -296,6 +296,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 /// <param name="signAlgorithm">The signature algorith. You can use either ed25519 or secp256k1 algorithm. The algorithm should macth the keys provided</param>
 var result = casperClient.DeployService.Transfer(amount, fromAccount, toAccountKey, id, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 ```
+> In case you want to make the deploy to Json you can use the method TransferToJson
 ### Delegate Tokens
 This method Delegate tokens to a Validator
 This operation uses the ExecutableDeployItem StoredContractByHash
@@ -314,6 +315,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 /// <param name="signAlgorithm">The signature algorith. You can use either ed25519 or secp256k1 algorithm. The algorithm should macth the keys provided</param>
 var result = casperClient.DeployService.Delegate(amount, fromAccountKey, toAccountKey, id, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 ```
+> In case you want to make the deploy to Json you can use the method DelegateToJson
 ### Undelegate Tokens
 This method Undelegate tokens from a Validator
 This operation uses the ExecutableDeployItem StoredContractByHash
@@ -332,6 +334,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 /// <param name="signAlgorithm">The signature algorith. You can use either ed25519 or secp256k1 algorithm. The algorithm should macth the keys provided</param>
 var result = casperClient.DeployService.Undelegate(amount, fromAccountKey, toAccountKey, id, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 ```
+> In case you want to make the deploy to Json you can use the method UndelegateToJson
 ## Other Deploy Operations
 Many other Deploy operations are available on Casper Network. 
 You have the freedom to construct your own request and deploy the Contract by using the SDK methods following.
