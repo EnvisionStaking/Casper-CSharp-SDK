@@ -1,7 +1,5 @@
 ﻿using EnvisionStaking.Casper.SDK.Enums;
 using EnvisionStaking.Casper.SDK.Utils;
-using Nethereum.Signer;
-using Nethereum.Signer.Crypto;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.Sec;
 using Org.BouncyCastle.Asn1.X9;
