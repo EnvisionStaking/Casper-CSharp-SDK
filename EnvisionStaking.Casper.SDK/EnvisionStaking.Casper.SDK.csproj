@@ -1,13 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RepositoryUrl>https://github.com/EnvisionStaking/Casper-CSharp-SDK</RepositoryUrl>
+    <PackageIconUrl>https://twitter.com/envisionstaking/photo</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/EnvisionStaking</PackageProjectUrl>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Description>Our contribution towards the global adoption of Casper Network. The .NET C# SDK enables .NET delvelopers to implement enterprise applications on Casper Network.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Company>Envision Staking</Company>
+    <ApplicationIcon />
+    <StartupObject />
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Konscious.Security.Cryptography.Blake2" Version="1.0.9" />
-    <PackageReference Include="Nethereum.Signer" Version="4.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
   </ItemGroup>
