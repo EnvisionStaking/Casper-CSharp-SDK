@@ -21,7 +21,7 @@ The SDK is available as a [NuGet package](https://www.nuget.org/packages/Envisio
   > * Right Click on your project
   > * Select Manage NuGet packages
   > * Search for EnvisionStaking.Casper.SDK package
-  > ![InstallPackage](../../../Pictures/NuGetSDKInstall.png)
+  > ![Install Package](NuGetSDKInstall.png)
   > * Install the package
   > * You are ready to use the Casper SDK
 ## Casper Client
