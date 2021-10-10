@@ -9,6 +9,8 @@ The available sections in this document are
 * [How To Guides](https://github.com/EnvisionStaking/Casper-CSharp-SDK#how-to-guides)
 # Getting Started
 If you are not familiar with Casper Network, our advice is to navigate to [Casper Network Documents](https://docs.casperlabs.io/en/latest/faq/index.html) and get prepared before proceeding with the SDK.
+## What is Casper?
+Casper is an open-source Proof-of-Stake blockchain network built off the CBC (Correct-by-Construction) Casper specification originally established by early Ethereum developers. The Casper network is optimized for enterprise and developer adoption by focusing on unique features like upgradeable contracts, predictable network fees, privacy flexibility, on-chain governance, and developer-friendly languages. Casper solves the scalability trilemma by allowing development teams to build with confidence that the network will optimize for security, decentralization, and high throughput.
 ## Adding the SDK to your .NET Project
 The SDK is available as a [NuGet package](https://www.nuget.org/packages/EnvisionStaking.Casper.SDK/)
 ### Steps for adding Nuget Package in your project
