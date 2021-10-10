@@ -74,6 +74,15 @@ namespace EnvisionStaking.Casper.SDK.Test
         }
 
         [TestMethod]
+        public void MakeTransferDeployEd25519()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var makeDeployResult = casperClient.DeployService.MakeDeployTransfer(transferAmount, fromAccountKey01, toAccountKey, 1, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
+
+            Assert.IsNotNull(makeDeployResult);
+        }
+
+        [TestMethod]
         public void TransferToJsonSecp256k1()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
