@@ -9,7 +9,8 @@
     <PackageIconUrl>https://en.gravatar.com/userimage/212478621/6d82556bae474d5367556ad829bb4c43.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/EnvisionStaking</PackageProjectUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Description>Our contribution towards the global adoption of Casper Network. The .NET C# SDK enables .NET delvelopers to implement enterprise applications on Casper Network.</Description>
+    <Description>Our contribution towards the global adoption of Casper Network. The .NET C# SDK enables .NET delvelopers to implement enterprise applications on Casper Network.
+The SDK documentation can be found on GitHub https://github.com/EnvisionStaking/Casper-CSharp-SDK/blob/main/README.md</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company>Envision Staking</Company>
     <ApplicationIcon />
