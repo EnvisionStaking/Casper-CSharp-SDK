@@ -69,7 +69,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             //Set Approval
             var keys = signingSvc.GetKeyPairFromFile(publicKeyLocation, privateKeyLocation, signAlgorithm);
             putDeployRequest.Parameters.deploy.approvals = new List<Approval>();
-            putDeployRequest.Parameters.deploy.approvals.Add(CreateAndSignApproval(fromAccount, putDeployRequest.Parameters.deploy.hash, keys));
+            putDeployRequest.Parameters.deploy.approvals.Add(SignApproval(fromAccount, putDeployRequest.Parameters.deploy.hash, keys));
 
             return putDeployRequest;
         }
@@ -149,7 +149,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             //Set Approval
             var keys = signingSvc.GetKeyPairFromFile(publicKeyLocation, privateKeyLocation, signAlgorithm);
             putDeployRequest.Parameters.deploy.approvals = new List<Approval>();
-            putDeployRequest.Parameters.deploy.approvals.Add(CreateAndSignApproval(delegatorAccount, putDeployRequest.Parameters.deploy.hash, keys));
+            putDeployRequest.Parameters.deploy.approvals.Add(SignApproval(delegatorAccount, putDeployRequest.Parameters.deploy.hash, keys));
 
             return putDeployRequest;
         }
@@ -157,7 +157,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         #endregion
 
         #region Other
-        private Approval CreateAndSignApproval(string fromAccount, string deployHash, Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keys)
+        public Approval SignApproval(string fromAccount, string deployHash, Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keys)
         {
             byte[] hashValueByte = ByteUtil.HexToByteArray(deployHash);
             byte[] algorithmBytes = hashSvc.GetAlgorithmBytes(fromAccount);
