@@ -5,6 +5,23 @@ The .NET C# SDK enables .NET delvelopers to implement enterprise applications on
 
 # Getting Started
 If you are not familiar with Casper Network, our advice is to navigate to [Casper Network Documents](https://docs.casperlabs.io/en/latest/faq/index.html) and get prepared before proceeding with the SDK.
+## Adding SDK to your .NET Project
+The SDK is available as a [NuGet package](https://www.nuget.org/packages/EnvisionStaking.Casper.SDK/)
+### Steps for adding Nuget Package in your project
+* Open Visual Studio
+* Create a new Project
+* Install Nuget package
+  > **.NET CLI** \
+  > Run the following command to add NuGet package in your project \
+  > dotnet add package EnvisionStaking.Casper.SDK
+
+  > **NuGet Package Manager**
+  > * Right Click on your project
+  > * Select Manage NuGet packages
+  > * Search for EnvisionStaking.Casper.SDK package
+  > ![](../../../Pictures/NuGetSDKInstall.png)
+  > * Install the package
+  > * You are ready to use Casper SDK
 ## Casper Client
 The Casper client is the main class of the SDK, in which you can interact with Casper Network. 
 
@@ -595,7 +612,7 @@ var result = casperClient.HashService.GetHashToBinaryFixedSize(Encoding.UTF8.Get
 ```
 
 ## Signing Service
-Casper Network currently supports two Digital Signature Algorithms Ed25519 and Secp256k1. These algorithms are responsible for Deployent signing on Casper Network.
+Casper Network currently supports two Digital Signature Algorithms Ed25519 and Secp256k1. These algorithms are responsible for signing deploys on Casper Network.
 Ed25519 is an EdDSA signature scheme using SHA-512 (SHA-2) and Curve25519.
 Secp256k1 is an EdDSA signature scheme using elliptic curve and became very popular due to Bitcoin usage.
 ### Ed25519 Methods
