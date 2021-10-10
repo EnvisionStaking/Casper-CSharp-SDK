@@ -3,6 +3,10 @@
 Our contribution towards the global adoption of Casper Network. 
 The .NET C# SDK enables .NET delvelopers to implement enterprise applications on Casper Network.
 
+The available sections in this document are
+* [Getting Started - Adding SDK to your .NET Project](https://github.com/EnvisionStaking/Casper-CSharp-SDK#getting-started)
+* [Casper Client Usage](https://github.com/EnvisionStaking/Casper-CSharp-SDK#casper-client)
+* [How To Guides](https://github.com/EnvisionStaking/Casper-CSharp-SDK#how-to-guides)
 # Getting Started
 If you are not familiar with Casper Network, our advice is to navigate to [Casper Network Documents](https://docs.casperlabs.io/en/latest/faq/index.html) and get prepared before proceeding with the SDK.
 ## Adding SDK to your .NET Project
@@ -24,7 +28,7 @@ The SDK is available as a [NuGet package](https://www.nuget.org/packages/Envisio
   > ![Install Package](EnvisionStaking.Casper.SDK/Images/NuGetSDKInstall.png)
   > * Install the latest version of the package
   > * You are ready to use the Casper SDK
-## Casper Client
+# Casper Client
 The Casper client is the main class of the SDK, in which you can interact with Casper Network. 
 
 You can instantiate the Casper client as shown below
@@ -267,12 +271,12 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 var result = casperClient.RpcService.GetEraInfoByHeight(blockHeight);
 ```
 
-### Common Deploy Operations
+## Common Deploy Operations
 These are the common operations available on casper Network. 
 With these operations available in the SDK you can transfer, delegate and undelegate tokens.
 The following operations are defined as ExecutableDeployItems.
 > For further information please reference Casper Network [Documentation](https://docs.casperlabs.io/en/latest/implementation/serialization-standard.html#payment-session)
-#### Transfer Tokens
+### Transfer Tokens
 This deploys a Transfer in Casper Network.
 The operation uses the Transfer ExecutableDeployItem
 ```C#
@@ -290,7 +294,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 /// <param name="signAlgorithm">The signature algorith. You can use either ed25519 or secp256k1 algorithm. The algorithm should macth the keys provided</param>
 var result = casperClient.DeployService.Transfer(amount, fromAccount, toAccountKey, id, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 ```
-#### Delegate Tokens
+### Delegate Tokens
 This method Delegate tokens to a Validator
 This operation uses the ExecutableDeployItem StoredContractByHash
 ```C#
@@ -308,7 +312,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 /// <param name="signAlgorithm">The signature algorith. You can use either ed25519 or secp256k1 algorithm. The algorithm should macth the keys provided</param>
 var result = casperClient.DeployService.Delegate(amount, fromAccountKey, toAccountKey, id, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 ```
-#### Undelegate Tokens
+### Undelegate Tokens
 This method Undelegate tokens from a Validator
 This operation uses the ExecutableDeployItem StoredContractByHash
 ```C#
@@ -326,10 +330,10 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 /// <param name="signAlgorithm">The signature algorith. You can use either ed25519 or secp256k1 algorithm. The algorithm should macth the keys provided</param>
 var result = casperClient.DeployService.Undelegate(amount, fromAccountKey, toAccountKey, id, @"keys\Ed25519_Test_public_key.pem", @"keys\Ed25519_Test_secret_key.pem", SignAlgorithmEnum.ed25519);
 ```
-### Other Deploy Operations
+## Other Deploy Operations
 Many other Deploy operations are available on Casper Network. 
 You have the freedom to construct your own request and deploy the Contract by using the SDK methods following.
-#### Put Deploy Stored Contract By Hash
+### Put Deploy Stored Contract By Hash
 This method deploys StoredContractByHash operation.
 The Delegate and Undelegate methods described above uses the StoredContractByHash operation.
 This operation uses the ExecutableDeployItem StoredContractByHash.
@@ -342,7 +346,7 @@ PutDeployStoredContractByHashRequest request = new PutDeployStoredContractByHash
 PutDeployResult result = casperClient.RpcService.PutDeploy(request);
 ```
 > For a complete example please reference the How To Guides section.
- #### Put Deploy Stored Contract By Name
+ ### Put Deploy Stored Contract By Name
 This method deploys StoredContractByName operation.
 This operation uses the ExecutableDeployItem StoredContractByName.
 ```C#
@@ -353,7 +357,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 PutDeployStoredContractByNameRequest request = new PutDeployStoredContractByNameRequest();
 PutDeployResult result = casperClient.RpcService.PutDeploy(request);
 ```
-#### Put Deploy Stored Versioned Contract By Hash
+### Put Deploy Stored Versioned Contract By Hash
 This method deploys StoredVersionedContractByHash operation.
 This operation uses the ExecutableDeployItem StoredVersionedContractByHash.
 ```C#
@@ -364,7 +368,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 PutDeployStoredVersionedContractByHashRequest request = new PutDeployStoredVersionedContractByHashRequest();
 PutDeployResult result = casperClient.RpcService.PutDeploy(request);
 ```
-#### Put Deploy Stored Versioned Contract By Name
+### Put Deploy Stored Versioned Contract By Name
 This method deploys StoredVersionedContractByName operation.
 This operation uses the ExecutableDeployItem StoredVersionedContractByName.
 ```C#
@@ -375,7 +379,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 PutDeployStoredVersionedContractByNameRequest request = new PutDeployStoredVersionedContractByNameRequest();
 PutDeployResult result = casperClient.RpcService.PutDeploy(request);
 ```
-#### Put Deploy Transfer
+### Put Deploy Transfer
 This method deploys Transfer operation.
 The Transfer method described above uses the Transfer operation.
 This operation uses the ExecutableDeployItem Transfer.
@@ -389,9 +393,9 @@ PutDeployResult result = casperClient.RpcService.PutDeploy(request);
 ```
 > For a complete example please reference the How To Guides section.
 
-### Asynchronous Operations
+## Asynchronous Operations
 You can use the following asynchronous operations.
-#### Get Next Block Async
+### Get Next Block Async
 This async method returns a result once a block is generated in Casper Network
 
 ```C#
@@ -400,7 +404,7 @@ string rpcUrl = "http://{NodeIp}:{7777}/rpc";
 CasperClient casperClient = new CasperClient(rpcUrl);
 var result = await casperClient.RpcService.GetNextBlockAsync();
 ```
-#### Get Next N Block Async
+### Get Next N Block Async
 This async method returns a result once next N block is generated in Casper Network
 
 ```C#
@@ -411,7 +415,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 //The result will be completed after the generation of 2 blocks from the time method triggered.
 var result = await casperClient.RpcService.AwaitNBlockAsync(2);
 ```
-#### Await Until Height Block Generated Async
+### Await Until Height Block Generated Async
 This async method returns a result when a block is generated for a specific height
 
 ```C#
@@ -424,7 +428,7 @@ var currentBlock = casperClient.RpcService.GetBlockLast();
 //After getting the current block height, add 2 blocks and wait until block generated with that specific height
 var result = await casperClient.RpcService.AwaitUntilNBlockAsync(currentBlock.result.block.header.height+2);
 ```
-#### Get Next Era Async
+### Get Next Era Async
 This async method returns a result once an Era is completed in Casper Network
 Please note that an Era is generated every two hours
 ```C#
@@ -433,7 +437,7 @@ string rpcUrl = "http://{NodeIp}:{7777}/rpc";
  CasperClient casperClient = new CasperClient(rpcUrl);
 var result = await casperClient.RpcService.GetNextEraAsync();
 ```
-#### Get Next N Era Async
+### Get Next N Era Async
 This async method returns a result once next N Era is completed in Casper Network
 Please note that an Era is generated every two hours
 ```C#
@@ -444,7 +448,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 //The result will be completed after the completion of 2 Eras from the time method triggered.
 var result = await casperClient.RpcService.AwaitNEraAsync(1);
 ```
-#### Await Until Era with Id Completed Async
+### Await Until Era with Id Completed Async
 This async method returns a result when an Era is completed with a specific id.
 Please note that an Era is generated every two hours
 ```C#
@@ -457,7 +461,7 @@ var currentBlock = casperClient.RpcService.GetBlockLast();
 //After getting the current Era, add 1 Era and wait until Era completed with that specific id
 var result = await casperClient.RpcService.AwaitUntilNEraAsync(currentBlock.result.block.header.era_id + 1);
 ```
-#### Await Until Deploy is Completed Async
+### Await Until Deploy is Completed Async
 This async method returns a result when a Deployment is completed.
 You can use this async method to wait until  Deployment completion.
 ```C#
