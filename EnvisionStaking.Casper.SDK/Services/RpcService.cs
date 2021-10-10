@@ -27,7 +27,7 @@ namespace EnvisionStaking.Casper.SDK.Services
     {
         private const int BLOCKDELAY = 5000;
         private const int ERADELAY = 60000;
-        private const int DEPLOYDELAY = 2000;
+        private const int DEPLOYDELAY = 5000;
         public RpcService(string rpcUrl, string jsonRpcVersion = "2.0", string jsonRpcId = "0")
         {
             JsonRpcVersion = jsonRpcVersion;
