@@ -5,24 +5,36 @@ using System.Linq;
 using System.Text;
 using EnvisionStaking.Casper.SDK.Enums;
 using EnvisionStaking.Casper.SDK.Utils;
-using Konscious.Security.Cryptography;
+using Org.BouncyCastle.Crypto.Digests;
 
 namespace EnvisionStaking.Casper.SDK.Services
 {
+    /// <summary>
+    /// The hash service utilizes BLAKE2b which is a cryptographic hash function.
+    /// </summary>
     public class HashService
     {
-
+        /// <summary>
+        /// Get the Account Hash from the Account key
+        /// </summary>
+        /// <param name="accountKey"></param>
+        /// <returns></returns>
         public string GetAccountHash(string accountKey)
         {
             var valueKeyAlgorithm = ByteUtil.CombineBytes(Encoding.UTF8.GetBytes(GetAlgorithm(accountKey).ToString().ToLower()), new byte[1]);
 
-            var valueKey = ByteUtil.CombineBytes(valueKeyAlgorithm, StringToByteArray(accountKey.Substring(2)));
+            var valueKey = ByteUtil.CombineBytes(valueKeyAlgorithm, ByteUtil.HexToByteArray(accountKey.Substring(2)));
 
             var resultHex = GetHashToHexFixedSize(valueKey, 32);
 
             return resultHex;
         }
-
+        /// <summary>
+        /// Get the Hash to hexadecimal value
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="hashSize"></param>
+        /// <returns></returns>
         public string GetHashToHexFixedSize(byte[] bytes, int hashSize)
         {
             var resultByte = GetHashToBinaryFixedSize(bytes, hashSize);
@@ -31,17 +43,27 @@ namespace EnvisionStaking.Casper.SDK.Services
 
             return resultHex;
         }
-
+        /// <summary>
+        /// Get Hash To Byte Array
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="hashSize"></param>
+        /// <returns></returns>
         public byte[] GetHashToBinaryFixedSize(byte[] bytes, int hashSize)
         {
-            var hashAlgorithm = new HMACBlake2B(hashSize*8);
-            hashAlgorithm.Initialize();
+            
+            var blake2B = new Blake2bDigest(hashSize * 8);
+            blake2B.BlockUpdate(bytes, 0, bytes.Length);
 
-            var resultBytes = hashAlgorithm.ComputeHash(bytes);
-
-            return resultBytes;
+            byte[] result = new byte[hashSize];
+            blake2B.DoFinal(result, 0);
+            return result;
         }      
-
+        /// <summary>
+        /// Get the Signing Algorithm
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public SignAlgorithmEnum GetAlgorithm(string key)
         {
             string keyStartingWith = key.Substring(0, 2);
@@ -78,7 +100,11 @@ namespace EnvisionStaking.Casper.SDK.Services
                 throw new ArgumentOutOfRangeException(String.Format("Unknown key prefix: [%s]", key.Substring(0, 2)));
             }
         }
-
+        /// <summary>
+        /// Get the Signing Algorithm in bytes
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public byte[] GetAlgorithmBytes(string key)
         {
             string keyStartingWith = key.Substring(0, 2);
@@ -107,6 +133,11 @@ namespace EnvisionStaking.Casper.SDK.Services
             }
         }
 
+        /// <summary>
+        /// Get the Signing Algorithm in Hex
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public string GetAlgorithmHex(string key)
         {
             string keyStartingWith = key.Substring(0, 2);
@@ -133,14 +164,6 @@ namespace EnvisionStaking.Casper.SDK.Services
             {
                 throw new ArgumentOutOfRangeException(String.Format("Unknown key prefix: [%s]", key.Substring(0, 2)));
             }
-        }
-
-        private byte[] StringToByteArray(string hex)
-        {
-            return Enumerable.Range(0, hex.Length)
-                             .Where(x => x % 2 == 0)
-                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                             .ToArray();
         }
 
     }

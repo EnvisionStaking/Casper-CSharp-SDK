@@ -17,13 +17,29 @@ using System.IO;
 
 namespace EnvisionStaking.Casper.SDK.Services
 {
+    /// <summary>
+    /// Casper Network currently supports two Digital Signature Algorithms Ed25519 and Secp256k1. These algorithms are responsible for signing deploys on Casper Network.
+    /// </summary>
     public class SigningService
     {
+        /// <summary>
+        /// Get the Public-Private key pair from pem file
+        /// </summary>
+        /// <param name="publicKeyFilePath"></param>
+        /// <param name="privateKeyFilePath"></param>
+        /// <param name="signAlgorithm"></param>
+        /// <returns></returns>
         public AsymmetricCipherKeyPair GetKeyPairFromFile(string publicKeyFilePath, string privateKeyFilePath, SignAlgorithmEnum signAlgorithm)
         {
             return GetKeyPair(File.OpenRead(publicKeyFilePath), File.OpenRead(privateKeyFilePath), signAlgorithm);
         }
-
+        /// <summary>
+        /// Get the Public-Private key pair from Stream
+        /// </summary>
+        /// <param name="publicKeyIn"></param>
+        /// <param name="privateKeyIn"></param>
+        /// <param name="signAlgorithm"></param>
+        /// <returns></returns>
         public AsymmetricCipherKeyPair GetKeyPair(Stream publicKeyIn, Stream privateKeyIn, SignAlgorithmEnum signAlgorithm)
         {
             if (signAlgorithm == SignAlgorithmEnum.ed25519)
@@ -42,7 +58,11 @@ namespace EnvisionStaking.Casper.SDK.Services
                 return (AsymmetricCipherKeyPair)secretPem;
             }
         }
-
+        /// <summary>
+        /// Generate Key Pair
+        /// </summary>
+        /// <param name="signAlgorithm"></param>
+        /// <returns></returns>
         public AsymmetricCipherKeyPair GenerateKeyPair(SignAlgorithmEnum signAlgorithm)
         {
             if (signAlgorithm == SignAlgorithmEnum.ed25519)
@@ -71,15 +91,12 @@ namespace EnvisionStaking.Casper.SDK.Services
                 throw new NotSupportedException("Sign Algorithm not supported");
             }
         }
-
-        private Ed25519Signer GenerateKeyPairEd25519(byte[] privateKeyBytes)
-        {
-            Ed25519PrivateKeyParameters privateKeyParameters = new Ed25519PrivateKeyParameters(privateKeyBytes, 0);
-            Ed25519Signer ed25519Signer = new Ed25519Signer();
-            ed25519Signer.Init(true, privateKeyParameters);
-            return ed25519Signer;
-        }
-
+        /// <summary>
+        /// Generate Signature with Ed25519 Algo
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="toSign"></param>
+        /// <returns></returns>
         public byte[] GetSignatureEd25519(AsymmetricKeyParameter privateKey, byte[] toSign)
         {
             Ed25519Signer signer = new Ed25519Signer();
@@ -87,6 +104,13 @@ namespace EnvisionStaking.Casper.SDK.Services
             signer.BlockUpdate(toSign, 0, toSign.Length);
             return signer.GenerateSignature();
         }
+        /// <summary>
+        /// Verify Signature with Ed25519 Algo
+        /// </summary>
+        /// <param name="publicKeyParameters"></param>
+        /// <param name="message"></param>
+        /// <param name="signed"></param>
+        /// <returns></returns>
         public bool VerifySignatureEd25519(AsymmetricKeyParameter publicKeyParameters, byte[] message, byte[] signed)
         {
             Ed25519Signer verifier = new Ed25519Signer();
@@ -95,6 +119,12 @@ namespace EnvisionStaking.Casper.SDK.Services
             return verifier.VerifySignature(signed);
         }
 
+        /// <summary>
+        /// Generate Signature with Secp256k1 Algo
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="toSign"></param>
+        /// <returns></returns>
         public byte[] GetSignatureSecp256k1(AsymmetricKeyParameter privateKey, byte[] toSign)
         {
             var signer = SignerUtilities.GetSigner("SHA-256withPLAIN-ECDSA");
@@ -102,8 +132,14 @@ namespace EnvisionStaking.Casper.SDK.Services
             signer.BlockUpdate(toSign, 0, toSign.Length);
             var signature = signer.GenerateSignature();
             return signature;
-        }       
-
+        }
+        /// <summary>
+        /// Verify Signature with Secp256k1 Algo
+        /// </summary>
+        /// <param name="publicKeyParameters"></param>
+        /// <param name="message"></param>
+        /// <param name="signed"></param>
+        /// <returns></returns>
         public bool VerifySignatureSecp256k1(AsymmetricKeyParameter publicKeyParameters, byte[] message, byte[] signed)
         {
             var signer = SignerUtilities.GetSigner("SHA-256withPLAIN-ECDSA");
@@ -111,6 +147,36 @@ namespace EnvisionStaking.Casper.SDK.Services
             signer.BlockUpdate(message, 0, message.Length);
             var signature = signer.VerifySignature(signed);
             return signature;
+        }
+        /// <summary>
+        /// Convert Private Key To Pem
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <returns></returns>
+        public string ConvertPrivateKeyToPem(AsymmetricKeyParameter privateKey)
+        {
+            using (var stringWriter = new StringWriter())
+            {
+                var pemWriter = new Org.BouncyCastle.OpenSsl.PemWriter(stringWriter);
+                pemWriter.WriteObject(privateKey);
+                pemWriter.Writer.Flush();
+                return stringWriter.ToString();
+            }
+        }
+        /// <summary>
+        /// Convert Public Key To Pem
+        /// </summary>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
+        public string ConvertPublicKeyToPem(AsymmetricKeyParameter publicKey)
+        {
+            using (var stringWriter = new StringWriter())
+            {
+                Org.BouncyCastle.OpenSsl.PemWriter pemWriter = new Org.BouncyCastle.OpenSsl.PemWriter(stringWriter);
+                pemWriter.WriteObject(publicKey);
+                pemWriter.Writer.Flush();
+                return stringWriter.ToString();
+            }
         }
 
         private byte[] ReadPemToByte(Stream keyStream)
@@ -137,26 +203,6 @@ namespace EnvisionStaking.Casper.SDK.Services
             return pemObject;
         }
 
-        public string ConvertPrivateKeyToPem(AsymmetricKeyParameter privateKey)
-        {
-            using (var stringWriter = new StringWriter())
-            {
-                var pemWriter = new Org.BouncyCastle.OpenSsl.PemWriter(stringWriter);
-                pemWriter.WriteObject(privateKey);
-                pemWriter.Writer.Flush();
-                return stringWriter.ToString();
-            }
-        }
 
-        public string ConvertPublicKeyToPem(AsymmetricKeyParameter publicKey)
-        {
-            using (var stringWriter = new StringWriter())
-            {
-                Org.BouncyCastle.OpenSsl.PemWriter pemWriter = new Org.BouncyCastle.OpenSsl.PemWriter(stringWriter);
-                pemWriter.WriteObject(publicKey);
-                pemWriter.Writer.Flush();
-                return stringWriter.ToString();
-            }
-        }
     }
 }

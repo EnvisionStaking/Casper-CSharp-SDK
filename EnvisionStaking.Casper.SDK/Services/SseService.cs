@@ -8,18 +8,42 @@ using System.Threading.Tasks;
 
 namespace EnvisionStaking.Casper.SDK.Services
 {
+    /// <summary>
+    ///The Server-Sent Events (SSE) is a server push technology enabling a client to receive automatic updates from a server through an HTTP connection. SSE is fully supported by Casper Network. With this SDK you are able to subscribe to events and utilize the event driven operations.
+    /// </summary>
     public class SseService
     {
         private readonly SseTypeEnum _sseType;
         private readonly string _sseUrl;
         private int _retriesCount;
 
+        /// <summary>
+        /// This event triggers every couple of seconds/minutes with the API Verion.
+        /// </summary>
         public event EventHandler<SseApiVersion> ApiVersionUpdated;
+        /// <summary>
+        /// This event triggers when a Block is added in Casper Network.
+        /// </summary>
         public event EventHandler<SseBlockAdded> BlockAdded;
+        /// <summary>
+        /// This event triggers when a Deploy is Processed in Casper Network.
+        /// </summary>
         public event EventHandler<SseDeployProcessed> DeployProcessed;
+        /// <summary>
+        /// This event triggers on Fault occurance in Casper Network.
+        /// </summary>
         public event EventHandler<string> Fault;
+        /// <summary>
+        /// This event triggers when a step is processed in Casper Network.
+        /// </summary>
         public event EventHandler<string> Step;
+        /// <summary>
+        /// This event triggers when a Deploy is Accepted in Casper Network.
+        /// </summary>
         public event EventHandler<SseDeployAccepted> DeployAccepted;
+        /// <summary>
+        /// This event triggers on Finality Signature in Casper Network.
+        /// </summary>
         public event EventHandler<SseFinalitySignature> FinalitySignature;
 
         public SseService(string sseUrl, SseTypeEnum sseType)
@@ -29,7 +53,10 @@ namespace EnvisionStaking.Casper.SDK.Services
             _retriesCount = 0;
             GetEventsAsync();
         }
-
+        /// <summary>
+        /// Loop and Get the Events from SSE server async
+        /// </summary>
+        /// <returns></returns>
         public async Task GetEventsAsync()
         {
             using (HttpClient client = new HttpClient())
@@ -68,6 +95,10 @@ namespace EnvisionStaking.Casper.SDK.Services
             }
         }
 
+        /// <summary>
+        /// Parse the events received and invoke the events
+        /// </summary>
+        /// <param name="payload"></param>
         public void ParseEvents(string payload)
         {
             string data = string.Empty;   

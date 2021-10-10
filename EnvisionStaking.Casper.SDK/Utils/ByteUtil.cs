@@ -8,8 +8,17 @@ using System.Text;
 
 namespace EnvisionStaking.Casper.SDK.Utils
 {
+    /// <summary>
+    /// This util includes helper methods in binary format 
+    /// </summary>
     public class ByteUtil
     {
+        /// <summary>
+        /// Combine byte arrays
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
         public static byte[] CombineBytes(byte[] first, byte[] second)
         {
             byte[] bytes = new byte[first.Length + second.Length];
@@ -17,17 +26,30 @@ namespace EnvisionStaking.Casper.SDK.Utils
             Buffer.BlockCopy(second, 0, bytes, first.Length, second.Length);
             return bytes;
         }
-
+        /// <summary>
+        /// String to Byte Array
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static byte[] StringToByteArray(string value)
         {
             return Encoding.ASCII.GetBytes(value);
         }
-
+        /// <summary>
+        /// Byte Array to Hex
+        /// </summary>
+        /// <param name="byteArray"></param>
+        /// <returns></returns>
         public static string ByteArrayToHex(byte[] byteArray)
         {
             return BitConverter.ToString(byteArray).Replace("-", "").ToLower();
         }
 
+        /// <summary>
+        /// Hex to Byte Array
+        /// </summary>
+        /// <param name="hexString"></param>
+        /// <returns></returns>
         public static byte[] HexToByteArray(string hexString)
         {
             if (hexString.Length % 2 != 0)
@@ -45,6 +67,12 @@ namespace EnvisionStaking.Casper.SDK.Utils
             return data;
         }
 
+        /// <summary>
+        /// Get last N Bytes
+        /// </summary>
+        /// <param name="toTruncate"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
         public static byte[] GetLastNBytes(byte[] toTruncate, int length)
         {
             byte[] secretBytes = new byte[length];
@@ -52,7 +80,11 @@ namespace EnvisionStaking.Casper.SDK.Utils
             Array.Copy(toTruncate, start, secretBytes, 0, length);
             return secretBytes;
         }
-
+        /// <summary>
+        /// Remove leading zeros
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
         public static byte[] RemoveLeadingZeros(byte[] bytes)
         {
             Array.Reverse(bytes);
@@ -66,7 +98,11 @@ namespace EnvisionStaking.Casper.SDK.Utils
             Array.Reverse(bytes);
             return bytes;
         }
-
+        /// <summary>
+        /// Remove trailing zeros
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
         public static byte[] RemoveTrailingZeros(byte[] bytes)
         {
             for (int i = bytes.Length - 1; i >= 0; i--)
@@ -82,7 +118,11 @@ namespace EnvisionStaking.Casper.SDK.Utils
             }
             return bytes;
         }
-
+        /// <summary>
+        /// Prefix Option in bytes
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
         public static byte[] PrefixOption(byte[] bytes)
         {
 
@@ -98,7 +138,11 @@ namespace EnvisionStaking.Casper.SDK.Utils
             }
             return CombineBytes(optionPrefix, bytes);
         }
-
+        /// <summary>
+        /// Serialize to Byte Array
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static byte[] SerializeToByteArray(object obj)
         {
             if (obj == null)
@@ -112,7 +156,12 @@ namespace EnvisionStaking.Casper.SDK.Utils
                 return ms.ToArray();
             }
         }
-
+        /// <summary>
+        /// Desirialize from Byte Array
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="byteArray"></param>
+        /// <returns></returns>
         public static T DeserializeFromByteArray<T>(byte[] byteArray) where T : class
         {
             if (byteArray == null)
@@ -128,7 +177,12 @@ namespace EnvisionStaking.Casper.SDK.Utils
                 return obj;
             }
         }
-
+        /// <summary>
+        /// Resize Byte Array
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="newSize"></param>
+        /// <returns></returns>
         public static byte[] ResizeByteArray(byte[] bytes, int newSize)
         {
             Array.Resize<byte>(ref bytes, newSize);
