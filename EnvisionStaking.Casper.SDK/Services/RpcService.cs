@@ -355,6 +355,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             while (deploy.result.execution_results == null || deploy.result.execution_results.Count == 0)
             {
                 await Task.Delay(DEPLOYDELAY);
+                deploy = GetDeploy(deployHash);
             }
 
             return await Task.FromResult<DeployResult>(deploy);
