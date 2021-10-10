@@ -10,10 +10,12 @@ The SDK is available as a [NuGet package](https://www.nuget.org/packages/Envisio
 ### Steps for adding Nuget Package in your project
 * Open Visual Studio
 * Create a new Project
-* Install Nuget package
+* Install Nuget package. You can add the package via CLI command or through NuGet package manager.
   > **.NET CLI** \
-  > Run the following command to add NuGet package in your project \
-  > dotnet add package EnvisionStaking.Casper.SDK
+  > Run the following command to add NuGet package in your project.
+  > ```CLI
+  > dotnet add <YourProjectName> package EnvisionStaking.Casper.SDK
+  >```
 
   > **NuGet Package Manager**
   > * Right Click on your project
@@ -21,7 +23,7 @@ The SDK is available as a [NuGet package](https://www.nuget.org/packages/Envisio
   > * Search for EnvisionStaking.Casper.SDK package
   > ![](../../../Pictures/NuGetSDKInstall.png)
   > * Install the package
-  > * You are ready to use Casper SDK
+  > * You are ready to use the Casper SDK
 ## Casper Client
 The Casper client is the main class of the SDK, in which you can interact with Casper Network. 
 
