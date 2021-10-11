@@ -7,6 +7,7 @@ The available sections in this document are
 * [Getting Started](https://github.com/EnvisionStaking/Casper-CSharp-SDK#getting-started)
 * [Casper Client Usage](https://github.com/EnvisionStaking/Casper-CSharp-SDK#casper-client)
 * [How To Guides](https://github.com/EnvisionStaking/Casper-CSharp-SDK#how-to-guides)
+> You can also watch YouTube [How To Guides video series](https://www.youtube.com/playlist?list=PLOErI9KUKObNqdtFbbjX_vjDX32VnffjB)
 # Getting Started
 If you are not familiar with Casper Network, our advice is to navigate to [Casper Labs](https://casperlabs.io/) or [Casper Network Documents](https://docs.casperlabs.io/en/latest/faq/index.html) and get prepared before proceeding with this SDK.
 ## What is Casper?
