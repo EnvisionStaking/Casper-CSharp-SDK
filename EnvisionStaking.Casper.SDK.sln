@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvisionStaking.Casper.SDK.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvisionStaking.Casper.SDK.HowToGuides.QueryNetwork", "EnvisionStaking.Casper.SDK.HowToGuides.QueryNetwork\EnvisionStaking.Casper.SDK.HowToGuides.QueryNetwork.csproj", "{156B700B-0680-4FFA-8DFE-B64882115D96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvisionStaking.Casper.SDK.HowToGuides.DeployByHash", "EnvisionStaking.Casper.SDK.HowToGuides.DeployByHash\EnvisionStaking.Casper.SDK.HowToGuides.DeployByHash.csproj", "{723CAD56-B6F7-4A6B-AB5E-F74F65EA01B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{156B700B-0680-4FFA-8DFE-B64882115D96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{156B700B-0680-4FFA-8DFE-B64882115D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{156B700B-0680-4FFA-8DFE-B64882115D96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{723CAD56-B6F7-4A6B-AB5E-F74F65EA01B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{723CAD56-B6F7-4A6B-AB5E-F74F65EA01B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{723CAD56-B6F7-4A6B-AB5E-F74F65EA01B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{723CAD56-B6F7-4A6B-AB5E-F74F65EA01B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{5A972CE1-C5E8-4586-8FD8-58A9A92EACC9} = {9D0010DF-807B-462F-A2A3-769E9F247E04}
 		{DDAA02E4-65C7-407B-B862-AD773ABBDCEB} = {9D0010DF-807B-462F-A2A3-769E9F247E04}
 		{156B700B-0680-4FFA-8DFE-B64882115D96} = {9D0010DF-807B-462F-A2A3-769E9F247E04}
+		{723CAD56-B6F7-4A6B-AB5E-F74F65EA01B1} = {9D0010DF-807B-462F-A2A3-769E9F247E04}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A2584C8D-CA13-4629-B1A8-EB54B40FCBF0}

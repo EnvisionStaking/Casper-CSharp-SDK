@@ -336,7 +336,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// </summary>
         /// <param name="header"></param>
         /// <returns></returns>
-        private byte[] GetSerializedHeader(DeployHeader header)
+        public byte[] GetSerializedHeader(DeployHeader header)
         {
             byte[] bytes;
 
@@ -356,7 +356,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="payment"></param>
         /// <param name="transfer"></param>
         /// <returns></returns>
-        private string GetBodyHashTransfer(DeployPayment payment, DeployTransfer transfer)
+        public string GetBodyHashTransfer(DeployPayment payment, DeployTransfer transfer)
         {
             byte[] paymentBytes = payment.ModuleBytes.ToBytes();
 
@@ -373,7 +373,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="payment"></param>
         /// <param name="deployDelegate"></param>
         /// <returns></returns>
-        private string GetBodyHashDelegate(DeployPayment payment, DeployStoredContractByHash deployDelegate)
+        public string GetBodyHashDelegate(DeployPayment payment, DeployStoredContractByHash deployDelegate)
         {
             byte[] paymentBytes = payment.ModuleBytes.ToBytes();
 
@@ -389,7 +389,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// </summary>
         /// <param name="paymentAmount"></param>
         /// <returns></returns>
-        private DeployPayment NewPayment(decimal paymentAmount)
+        public DeployPayment NewPayment(decimal paymentAmount)
         {
             decimal standardPayment = paymentAmount;
             string standardPaymentByte = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512SerializerWithLength(standardPayment));
@@ -401,7 +401,6 @@ namespace EnvisionStaking.Casper.SDK.Services
             payment.ModuleBytes = new DeployModuleBytes(argsPayment);
             payment.ModuleBytes.module_bytes = "";
 
-
             return payment;
         }
         /// <summary>
@@ -411,7 +410,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="toAccount"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        private DeployTransfer NewTransfer(ulong amount, string toAccount, ulong id)
+        public DeployTransfer NewTransfer(ulong amount, string toAccount, ulong id)
         {
             string amountBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512SerializerWithLength(amount));
             string idBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu64SerializerWithPrefixOption(id));
@@ -432,7 +431,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="validatorAccount"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        private DeployStoredContractByHash NewDelegate(ulong amount, string delegatorAccount, string validatorAccount, ulong id)
+        public DeployStoredContractByHash NewDelegate(ulong amount, string delegatorAccount, string validatorAccount, ulong id)
         {
             string amountBytes = ByteUtil.ByteArrayToHex(TypesSerializer.Getu512SerializerWithLength(amount));
 

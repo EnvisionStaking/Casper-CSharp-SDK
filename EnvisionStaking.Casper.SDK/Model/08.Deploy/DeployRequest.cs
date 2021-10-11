@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EnvisionStaking.Casper.SDK.Model.DeployObject
 {
-    class DeployRequest : Base.Request
+    public class DeployRequest : Base.Request
     {
         public DeployRequest()
         {

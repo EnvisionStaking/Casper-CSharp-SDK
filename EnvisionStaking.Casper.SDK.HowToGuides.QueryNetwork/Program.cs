@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using EnvisionStaking.Casper.SDK;
 
-namespace EnvisionStaking.Casper.SDK.HowToGuides.Transfer
+namespace EnvisionStaking.Casper.SDK.HowToGuides.QueryNetwork
 {
     class Program
     {
