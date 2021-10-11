@@ -350,7 +350,7 @@ CasperClient casperClient = new CasperClient(rpcUrl);
 PutDeployStoredContractByHashRequest request = new PutDeployStoredContractByHashRequest();
 PutDeployResult result = casperClient.RpcService.PutDeploy(request);
 ```
-> For a complete example please reference the How To Guides section.
+> For a complete example please reference the [How to Deploy Stored Contract By Hash](https://github.com/EnvisionStaking/Casper-CSharp-SDK#how-to-deploy-stored-contract-by-hash).
  ### Put Deploy Stored Contract By Name
 This method deploys StoredContractByName operation.
 This operation uses the ExecutableDeployItem StoredContractByName.
@@ -1211,7 +1211,6 @@ namespace EnvisionStaking.Casper.SDK.HowToGuides.DeployContractByHash
 
     }
 }
-
 ```
 The Console Application result is shown below.
 ![Console Application result](EnvisionStaking.Casper.SDK/Images/ConsoleDeployStoredContractByHashResult.png)

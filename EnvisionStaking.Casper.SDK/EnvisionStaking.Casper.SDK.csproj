@@ -15,7 +15,7 @@ The SDK documentation can be found on GitHub https://github.com/EnvisionStaking/
     <Company>Envision Staking</Company>
     <ApplicationIcon />
     <StartupObject />
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
   </PropertyGroup>
 
   <ItemGroup>
