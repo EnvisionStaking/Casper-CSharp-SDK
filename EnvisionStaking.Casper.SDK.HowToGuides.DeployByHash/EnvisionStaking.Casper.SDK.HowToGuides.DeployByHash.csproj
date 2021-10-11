@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EnvisionStaking.Casper.SDK\EnvisionStaking.Casper.SDK.csproj" />
+    <PackageReference Include="EnvisionStaking.Casper.SDK" Version="1.0.6" />
   </ItemGroup>
 
 </Project>
