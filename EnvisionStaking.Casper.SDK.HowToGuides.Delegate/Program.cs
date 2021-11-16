@@ -28,9 +28,11 @@ namespace EnvisionStaking.Casper.SDK.HowToGuides.Delegate
                 //The private key pem file location in disk. This key should match the sender account
                 string privateKeyLocation = @"C:\tmp\Keys\secret_key.pem";
 
+                string chainName = "casper";
+
                 CasperClient client = new CasperClient(rpcUrl);
                 //Deploy the Delegation
-                var transferResult = client.DeployService.Delegate(amount, delegateAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, Enums.SignAlgorithmEnum.ed25519);
+                var transferResult = client.DeployService.Delegate(amount, delegateAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, Enums.SignAlgorithmEnum.ed25519, chainName);
 
                 Console.WriteLine($"Delegate Executed, Deploy Hash: {transferResult.result.deploy_hash}");
                 //Wait until delegation is completed. This may take few seconds\minutes

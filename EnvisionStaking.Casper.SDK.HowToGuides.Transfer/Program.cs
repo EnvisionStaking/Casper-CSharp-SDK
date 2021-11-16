@@ -28,9 +28,11 @@ namespace EnvisionStaking.Casper.SDK.HowToGuides.Transfer
                 //The private key pem file location in disk. This key should match the sender account
                 string privateKeyLocation = @"C:\tmp\Keys\secret_key.pem";
 
+                string chainName = "casper";
+
                 CasperClient client = new CasperClient(rpcUrl);
                 //Deploy the transfer
-                var transferResult = client.DeployService.Transfer(amount, senderAccount, receivingAccount, id, publicKeyLocation, privateKeyLocation, Enums.SignAlgorithmEnum.ed25519);
+                var transferResult = client.DeployService.Transfer(amount, senderAccount, receivingAccount, id, publicKeyLocation, privateKeyLocation, Enums.SignAlgorithmEnum.ed25519, chainName);
 
                 Console.WriteLine($"Transfer Executed, Deploy Hash: {transferResult.result.deploy_hash}");
                 //Wait until transfer is completed. This may take few seconds\minutes
