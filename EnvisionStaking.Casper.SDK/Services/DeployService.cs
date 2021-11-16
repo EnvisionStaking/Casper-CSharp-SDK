@@ -46,9 +46,9 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="privateKeyLocation"></param>
         /// <param name="signAlgorithm"></param>
         /// <returns></returns>
-        public PutDeployResult Transfer(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
+        public PutDeployResult Transfer(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, string chainName)
         {
-            PutDeployTransferRequest request = MakeDeployTransfer(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm);
+            PutDeployTransferRequest request = MakeDeployTransfer(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, chainName);
             return rpcSvc.PutDeploy(request);
         }
         /// <summary>
@@ -62,7 +62,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="privateKeyLocation"></param>
         /// <param name="signAlgorithm"></param>
         /// <returns></returns>
-        public PutDeployTransferRequest MakeDeployTransfer(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
+        public PutDeployTransferRequest MakeDeployTransfer(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, string chainName)
         {
             var normAmount = (ulong)(amount * 1000000000);
             PutDeployTransferRequest putDeployRequest = new PutDeployTransferRequest();
@@ -86,7 +86,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             putDeployRequest.Parameters.deploy.header.gas_price = 1;
             putDeployRequest.Parameters.deploy.header.body_hash = GetBodyHashTransfer(putDeployRequest.Parameters.deploy.payment, putDeployRequest.Parameters.deploy.session.Transfer);
             putDeployRequest.Parameters.deploy.header.dependencies = new List<string>();
-            putDeployRequest.Parameters.deploy.header.chain_name = "casper";
+            putDeployRequest.Parameters.deploy.header.chain_name = chainName;
 
             byte[] serializedHeader = GetSerializedHeader(putDeployRequest.Parameters.deploy.header);
             string hashedHeader = hashSvc.GetHashToHexFixedSize(serializedHeader, 32);
@@ -112,9 +112,9 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="privateKeyLocation"></param>
         /// <param name="signAlgorithm"></param>
         /// <returns></returns>
-        public string TransferToJson(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
+        public string TransferToJson(double amount, string fromAccount, string toAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, string chainName)
         {
-            return JsonConvert.SerializeObject(MakeDeployTransfer(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm), JsonUtil.JsonSerializerSettings());
+            return JsonConvert.SerializeObject(MakeDeployTransfer(amount, fromAccount, toAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, chainName), JsonUtil.JsonSerializerSettings());
         }
         #endregion
 
@@ -228,7 +228,7 @@ namespace EnvisionStaking.Casper.SDK.Services
             putDeployRequest.Parameters.deploy.header.gas_price = 1;
             putDeployRequest.Parameters.deploy.header.body_hash = GetBodyHashDelegate(putDeployRequest.Parameters.deploy.payment, putDeployRequest.Parameters.deploy.session.StoredContractByHash);
             putDeployRequest.Parameters.deploy.header.dependencies = new List<string>();
-            putDeployRequest.Parameters.deploy.header.chain_name = "casper";
+            putDeployRequest.Parameters.deploy.header.chain_name = chainName;
 
             byte[] serializedHeader = GetSerializedHeader(putDeployRequest.Parameters.deploy.header);
             string hashedHeader = hashSvc.GetHashToHexFixedSize(serializedHeader, 32);
