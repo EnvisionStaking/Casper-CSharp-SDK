@@ -555,7 +555,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// This method returns the OpenRPC Schema. The schema describes the JSON-RPC API of a node on the Casper network.
         /// </summary>
         /// <returns></returns>
-        public string GetRPCShema()
+        public string GetRPCSchema()
         {
             RPCSchemaRequest request = new RPCSchemaRequest();
             request.jsonrpc = JsonRpcVersion;

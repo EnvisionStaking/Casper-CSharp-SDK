@@ -227,10 +227,10 @@ namespace EnvisionStaking.Casper.SDK.Test
         }
 
         [TestMethod]
-        public void GetRPCShema()
+        public void GetRPCSchema()
         {
             CasperClient casperClient = new CasperClient(rpcUrl);
-            var result = casperClient.RpcService.GetRPCShema();
+            var result = casperClient.RpcService.GetRPCSchema();
 
             Assert.IsNotNull(result);
         }

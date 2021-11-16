@@ -209,13 +209,13 @@ string rpcUrl = "http://{NodeIp}:{7777}/rpc";
 CasperClient casperClient = new CasperClient(rpcUrl);
 var result = casperClient.RpcService.GetNodeStatus();
 ```
-#### GetShema
+#### GetSchema
 This method returns the OpenRPC Schema. The schema describes the JSON-RPC API of a node on the Casper network.
 ```C#
 string rpcUrl = "http://{NodeIp}:{7777}/rpc";
 
 CasperClient casperClient = new CasperClient(rpcUrl);
-var result = casperClient.RpcService.GetRPCShema();
+var result = casperClient.RpcService.GetRPCSchema();
 ```
 #### GetStateItem
 This method returns a stored value from the network. Stored values can be Account, Deploy, CLVAlue, Transfer, Contract, ContractPackage, ContractWasm, Bid, Withdraw, EraInfo etc.
