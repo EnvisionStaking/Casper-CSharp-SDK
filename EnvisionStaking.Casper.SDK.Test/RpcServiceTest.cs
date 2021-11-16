@@ -5,7 +5,7 @@ namespace EnvisionStaking.Casper.SDK.Test
     [TestClass]
     public class RpcServiceTest
     {
-        string rpcUrl = "http://54.183.43.215:7777/rpc";
+        string rpcUrl = "https://node-clarity-mainnet.make.services/rpc";
         string metricsUrl = "http://54.183.43.215:8888/metrics";
         string accountKey = "0202ba37a693fb6494b3c42a65f07a6123dd125d8bf8a16e10ec7b95b826b151230c";
         
@@ -364,6 +364,15 @@ namespace EnvisionStaking.Casper.SDK.Test
             var result = casperClient.RpcService.GetStateItem(hash);
 
             Assert.IsNotNull(result.result.stored_value.EraInfo);
+        }
+
+        [TestMethod]
+        public void GetValidatorChanges()
+        {
+            CasperClient casperClient = new CasperClient(rpcUrl);
+            var result = casperClient.RpcService.GetValidatorChanges();
+
+            Assert.IsNotNull(result.result.changes);
         }
     }
 }

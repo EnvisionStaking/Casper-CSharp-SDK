@@ -11,6 +11,7 @@ using EnvisionStaking.Casper.SDK.Model.NodePeers;
 using EnvisionStaking.Casper.SDK.Model.NodeStatus;
 using EnvisionStaking.Casper.SDK.Model.StateItem;
 using EnvisionStaking.Casper.SDK.Model.StateRootHash;
+using EnvisionStaking.Casper.SDK.Model.Validator;
 using EnvisionStaking.Casper.SDK.Utils;
 using Newtonsoft.Json;
 using System;
@@ -594,6 +595,21 @@ namespace EnvisionStaking.Casper.SDK.Services
             request.id = JsonRpcId;
 
             return RpcClient<NodePeersRequest, NodePeersResult>(RpCUrl, request, HttpMethod.Post);
+        }
+        #endregion
+
+        #region Validators
+        /// <summary>
+        /// This method returns the information of Validator changes
+        /// </summary>
+        /// <returns></returns>
+        public GetValidatorChangesResult GetValidatorChanges()
+        {
+            GetValidatorChangesRequest request = new GetValidatorChangesRequest();
+            request.jsonrpc = JsonRpcVersion;
+            request.id = JsonRpcId;
+
+            return RpcClient<GetValidatorChangesRequest, GetValidatorChangesResult>(RpCUrl, request, HttpMethod.Post);
         }
         #endregion
 
