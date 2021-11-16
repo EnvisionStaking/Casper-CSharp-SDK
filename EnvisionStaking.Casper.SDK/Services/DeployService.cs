@@ -130,9 +130,9 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="privateKeyLocation"></param>
         /// <param name="signAlgorithm"></param>
         /// <returns></returns>
-        public PutDeployResult Delegate(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
+        public PutDeployResult Delegate(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, string chainName)
         {
-            var request = MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Delegate);
+            var request = MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Delegate, chainName);
             return rpcSvc.PutDeploy(request);
         }
         /// <summary>
@@ -146,9 +146,9 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="privateKeyLocation"></param>
         /// <param name="signAlgorithm"></param>
         /// <returns></returns>
-        public PutDeployResult Undelegate(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
+        public PutDeployResult Undelegate(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, string chainName)
         {
-            var request = MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Undelegate);
+            var request = MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Undelegate, chainName);
             return rpcSvc.PutDeploy(request);
         }
         /// <summary>
@@ -162,9 +162,9 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="privateKeyLocation"></param>
         /// <param name="signAlgorithm"></param>
         /// <returns></returns>
-        public string DelegateToJson(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
+        public string DelegateToJson(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, string chainName)
         {
-            return JsonConvert.SerializeObject(MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Delegate), JsonUtil.JsonSerializerSettings());
+            return JsonConvert.SerializeObject(MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Delegate, chainName), JsonUtil.JsonSerializerSettings());
         }
         /// <summary>
         /// Get Undelegate deploy request in JSON format
@@ -177,9 +177,9 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="privateKeyLocation"></param>
         /// <param name="signAlgorithm"></param>
         /// <returns></returns>
-        public string UndelegateToJson(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm)
+        public string UndelegateToJson(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, string chainName)
         {
-            return JsonConvert.SerializeObject(MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Undelegate), JsonUtil.JsonSerializerSettings());
+            return JsonConvert.SerializeObject(MakeDeployDelegateUndelegate(amount, delegatorAccount, validatorAccount, id, publicKeyLocation, privateKeyLocation, signAlgorithm, StakingDeployEnum.Undelegate, chainName), JsonUtil.JsonSerializerSettings());
         }
         /// <summary>
         /// Make the Delegate or Undelegate deploy
@@ -193,7 +193,7 @@ namespace EnvisionStaking.Casper.SDK.Services
         /// <param name="signAlgorithm"></param>
         /// <param name="stakingDeploy"></param>
         /// <returns></returns>
-        public PutDeployStoredContractByHashRequest MakeDeployDelegateUndelegate(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, StakingDeployEnum stakingDeploy)
+        public PutDeployStoredContractByHashRequest MakeDeployDelegateUndelegate(double amount, string delegatorAccount, string validatorAccount, UInt64 id, string publicKeyLocation, string privateKeyLocation, SignAlgorithmEnum signAlgorithm, StakingDeployEnum stakingDeploy, string chainName)
         {
             var normAmount = (ulong)(amount * 1000000000);
             PutDeployStoredContractByHashRequest putDeployRequest = new PutDeployStoredContractByHashRequest();
